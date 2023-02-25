@@ -11,6 +11,14 @@ except:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install','pandas'])
     import pandas as pd
 try:
+    import PIL
+    import requests
+except:
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install','pillow'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'requests'])
+    import PIL
+    import requests
+try:
     import numpy as np
 except:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install','numpy'])
@@ -34,7 +42,7 @@ except:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'scipy'])
 import plotly.graph_objects as go
 import plotly.express as px
-
+import plotly.io as pio
 ########################################################################################################################
 
 
