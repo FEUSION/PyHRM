@@ -47,7 +47,7 @@ except:
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
-pio.renderers('browser')
+pio.renderers.default = 'browser'
 ########################################################################################################################
 
 
@@ -117,7 +117,7 @@ class MeltcurveInterpreter:
                 ytitle = 'dF/dT'
                 xtitle = 'Temperature in Celsius'
             fig.update_layout(title_text=(title),
-                              title_x = 0.22,
+                              title_x = 0.5,
                               title_font_size=30,
                               title_font_family='Arial',
                               legend_itemclick="toggleothers",
@@ -150,23 +150,12 @@ class MeltcurveInterpreter:
 
     def melt_convertion(self):
         data_copy = self.transformed_data.copy()
-        # for columns in data_copy.columns[1:]:
-        #     data_copy[columns] = ((data_copy[columns] - data_copy[columns].min())/(data_copy[columns].max() - data_copy[columns].min()))*10
-        #     #data_copy[columns] = data_copy[columns]/data_copy[columns].max()
-        # print(data_copy)
 
         for columns in data_copy.columns[1:]:
-            # for i in range(0, len(data_copy[columns])):
-                # if i != len(data_copy[columns])-1:
-                #     difference = (data_copy[columns][i] - data_copy[columns][i+1])/(data_copy.iloc[i,0] - data_copy.iloc[i+1,0])
-                #     diff_list.append(-difference)
-                # else:
-                #     difference = data_copy[columns][i]/data_copy.iloc[i,0]
-                #     diff_list.append(-difference)
             diff = np.gradient(data_copy[columns], data_copy.iloc[:,0])
             data_copy[columns] = -diff/10
         new_df = pd.DataFrame(columns = data_copy.columns)
-        xnew = np.linspace(70.00, 95.00, 748)
+        xnew = np.linspace(data_copy.iloc[0,0], data_copy.iloc[-1,0], int(len(data_copy.iloc[:,0])*2.945))
         new_df['X'] = xnew
         for cols in data_copy[1:]:
             splrep = scipy.interpolate.splrep(data_copy.iloc[:,0], data_copy[cols], s = 0.031)
@@ -200,7 +189,7 @@ class MeltcurveInterpreter:
                 ytitle = 'dF/dT'
                 xtitle = 'Temperature in Celsius'
             fig2.update_layout(title_text=(title),
-                              title_x = 0.22,
+                              title_x = 0.5,
                               title_font_size=30,
                               title_font_family='Arial',
                               legend_itemclick="toggleothers",
