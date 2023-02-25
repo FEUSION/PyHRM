@@ -163,7 +163,7 @@ class MeltcurveInterpreter:
                 #     difference = data_copy[columns][i]/data_copy.iloc[i,0]
                 #     diff_list.append(-difference)
             diff = np.gradient(data_copy[columns], data_copy.iloc[:,0])
-            data_copy[columns] = -diff
+            data_copy[columns] = -diff/10
         new_df = pd.DataFrame(columns = data_copy.columns)
         xnew = np.linspace(70.00, 95.00, 748)
         new_df['X'] = xnew
