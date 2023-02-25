@@ -47,6 +47,7 @@ except:
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
+pio.renderers('browser')
 ########################################################################################################################
 
 
