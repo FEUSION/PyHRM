@@ -1,10 +1,14 @@
 ########################################################################################################################
 ##Importing Libraries
 import sys
-import PIL
 import subprocess
 import warnings
 warnings.filterwarnings('ignore')
+subprocess.check_call([sys.executable,'-m', 'pip', 'install', '--upgrade', 'pip'])
+try:
+    import packaging
+except:
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'packaging'])
 try:
     import pandas as pd
 except:
