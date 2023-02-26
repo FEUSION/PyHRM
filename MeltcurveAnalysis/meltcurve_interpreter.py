@@ -77,7 +77,6 @@ class MeltcurveInterpreter:
 
     def __init__(self):
         # lables
-        self.labels = []
         # Data Frame after processed
         self.transformed_data = pd.DataFrame()
         self.processed_data = pd.DataFrame()
@@ -141,6 +140,7 @@ class MeltcurveInterpreter:
         fig.show()
 
     def data_read(self, path, labels=False, index=False, figure=False):
+        self.labels = []
         from tqdm import tqdm
         for j in tqdm(range(10), desc=f'Loading data', leave=False):
             time.sleep(0.1)
@@ -177,7 +177,13 @@ class MeltcurveInterpreter:
         else:
             return self.transformed_data
 
-    def melt_convertion(self, figure = False, return_value = False):
+    def path_input(self):
+        self.path = input("Enter the path to save: ")
+        if ":" not in self.path:
+            print("Invalid path")
+            self.path = None
+
+    def melt_convertion(self, figure = False, return_value = False, download=False):
         data_copy = self.transformed_data.copy()
 
         for columns in data_copy.columns[1:]:
