@@ -76,8 +76,6 @@ for j in tqdm(range(5), desc=f'Setup Complete', leave=False):
 class MeltcurveInterpreter:
 
     def __init__(self):
-        # lables
-        # Data Frame after processed
         self.labels = []
         self.transformed_data = pd.DataFrame()
         self.processed_data = pd.DataFrame()
@@ -141,7 +139,7 @@ class MeltcurveInterpreter:
         fig.show()
 
     def data_read(self, path, labels=False, index=False, figure=False):
-        del self.labels
+
         from tqdm import tqdm
         for j in tqdm(range(10), desc=f'Loading data', leave=False):
             time.sleep(0.1)
@@ -162,9 +160,11 @@ class MeltcurveInterpreter:
                                 1. Please check your input spreadsheet format. 
                                     If your input file has index, please assign "index=True".
                                 2.Or Invalid File""")
-
+        labels = []
         for cols in return_data.iloc[:, 0::3].columns:
-            self.labels.append(return_data[cols].unique()[0])
+            labels.append(return_data[cols].unique()[0])
+        self.labels = labels
+
         dummy_data = pd.concat([return_data.iloc[:, 1], return_data.iloc[:, 2::3]], axis=1)
         del return_data
         return_data = dummy_data
