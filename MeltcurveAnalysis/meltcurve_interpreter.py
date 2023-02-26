@@ -47,6 +47,11 @@ except:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'scipy'])
     import scipy
     from scipy.signal import find_peaks, peak_widths
+try:
+    import matplotlib.pyplot as plt
+except:
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'matplotlib'])
+    import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
@@ -173,44 +178,73 @@ class MeltcurveInterpreter:
         if return_value:
             return self.processed_data
 
+    def feature_detection(self):
+        data = self.processed_data
+        c1 = ['Tm1', 'Tstart1', 'Tend1', 'Height1', 'Difference1', 'Tm2', 'Tstart2', 'Tend2', 'Height2', 'Difference2',
+              'Tm3', 'Tstart3', 'Tend3', 'Height3', 'Difference3']
+        features_data = pd.DataFrame(columns=c1)
+        n = 3
+        for k in range(1, len(data.columns)):
 
-    # def feature_detection(self):
-    #     n = 2
-    #     #  plt.figure(figsize=(50, 150))
-    #     for k in range(1, len(data.columns)):
-    #         ## find peaks
-    #         peaks = find_peaks(data.iloc[:, k], 2)
-    #
-    #         sorted_heights = np.sort(list(peaks[1].values())[0])[::-1]
-    #         sorted_x = [float(data.iloc[:, 0][data.iloc[:, k] == o]) for o in sorted_heights]
-    #         final_peaks = [data.iloc[:, 0][data.iloc[:, 0] == t].index[0] for t in sorted_x][:n]
-    #         sorted_heights = sorted_heights[:n]
-    #         sorted_x = sorted_x[:n]
-    #         ## peak width
-    #
-    #         res = peak_widths(data.iloc[:, k], final_peaks, rel_height=0.75)
-    #         plt.subplot(18, 3, k)
-    #         plt.plot(data.iloc[:, 0], data.iloc[:, k])
-    #         plt.scatter(sorted_x, sorted_heights, color='red')
-    #         start_indices = [data.iloc[round(ele), 0] for ele in res[2]]
-    #         end_indices = [data.iloc[round(ele), 0] for ele in res[3]]
-    #
-    #         # plotting start end points
-    #
-    #         for ele3, ele4 in zip(start_indices, res[1]):
-    #             plt.scatter(ele3, ele4, color='green')
-    #         for ele3, ele4 in zip(end_indices, res[1]):
-    #             plt.scatter(ele3, ele4, color='orange')
-    #
-    #         final_res = (res[1], start_indices, end_indices)
-    #         for ele1, ele2 in zip(sorted_x, sorted_heights):
-    #             plt.vlines(x=ele1, ymin=0, ymax=ele2, linestyles='dashed')
-    #         plt.hlines(*final_res, color='blue')
-    #         plt.legend(['Derivative Plot', f'Peak: {sorted_x}', f'Start: {start_indices}', f'End: {end_indices}',
-    #                     f'Height: {sorted_heights}'])
-    #         # print(f'Peak (Tm) : {sorted_x}')
-    #         # eplt.savefig('17 CODING K.PNEUMOAND A.BAUMANII RUN FILE 05022023 (67 RXNS) Melt.png')
+            #find peaks
+            peaks = find_peaks(data.iloc[:, k], float((data.iloc[:, k].max()) * 0.25))
 
+            sorted_heights = np.sort(list(peaks[1].values())[0])[::-1]
+            sorted_x = [float(data.iloc[:, 0][data.iloc[:, k] == o]) for o in sorted_heights]
+            final_peaks = [data.iloc[:, 0][data.iloc[:, 0] == t].index[0] for t in sorted_x][:n]
+            sorted_heights = sorted_heights[:n]
+            sorted_x = sorted_x[:n]
 
+            #peak width
+            res = peak_widths(data.iloc[:, k], final_peaks, rel_height=0.75)
+
+            start_indices = [data.iloc[round(ele), 0] for ele in res[2]]
+            end_indices = [data.iloc[round(ele), 0] for ele in res[3]]
+            final_res = (res[1], start_indices, end_indices)
+
+            if len(sorted_x) != 3:
+                if len(sorted_x) == 1:
+                    features_data.loc[k, ['Tm1', 'Tm2', 'Tm3']] = [*sorted_x, 0, 0]
+                else:
+                    features_data.loc[k, ['Tm1', 'Tm2', 'Tm3']] = [*sorted_x, 0]
+            else:
+                features_data.loc[k, ['Tm1', 'Tm2', 'Tm3']] = *sorted_x,
+
+            if len(start_indices) != 3:
+                if len(start_indices) == 1:
+                    features_data.loc[k, ['Tstart1', 'Tstart2', 'Tstart3']] = [*start_indices, 0, 0]
+                else:
+                    features_data.loc[k, ['Tstart1', 'Tstart2', 'Tstart3']] = [*start_indices, 0]
+            else:
+                features_data.loc[k, ['Tstart1', 'Tstart2', 'Tstart3']] = *start_indices,
+
+            if len(end_indices) != 3:
+                if len(end_indices) == 1:
+                    features_data.loc[k, ['Tend1', 'Tend2', 'Tend3']] = [*end_indices, 0, 0]
+                else:
+                    features_data.loc[k, ['Tend1', 'Tend2', 'Tend3']] = [*end_indices, 0]
+            else:
+                features_data.loc[k, ['Tend1', 'Tend2', 'Tend3']] = *end_indices,
+
+            if len(sorted_heights) != 3:
+                if len(sorted_heights) == 1:
+                    features_data.loc[k, ['Height1', 'Height2', 'Height3']] = [*sorted_heights, 0, 0]
+                else:
+                    features_data.loc[k, ['Height1', 'Height2', 'Height3']] = [*sorted_heights, 0]
+            else:
+                features_data.loc[k, ['Height1', 'Height2', 'Height3']] = *sorted_heights,
+
+            if len(list(np.array(end_indices) - np.array(start_indices))) != 3:
+                if len(list(np.array(end_indices) - np.array(start_indices))) == 1:
+                    features_data.loc[k, ['Difference1', 'Difference2', 'Difference3']] = [
+                        *list(np.array(end_indices) - np.array(start_indices)), 0, 0]
+                else:
+                    features_data.loc[k, ['Difference1', 'Difference2', 'Difference3']] = [
+                        *list(np.array(end_indices) - np.array(start_indices)), 0]
+            else:
+                features_data.loc[k, ['Difference1', 'Difference2', 'Difference3']] = *list(
+                    np.array(end_indices) - np.array(start_indices)),
+
+        return features_data
 
 
