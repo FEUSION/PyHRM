@@ -1,61 +1,75 @@
 ########################################################################################################################
 ##Importing Libraries
+import time
 import sys
 import subprocess
 import warnings
 warnings.filterwarnings('ignore')
-subprocess.check_call([sys.executable,'-m', 'pip', 'install', '--upgrade', 'pip'])
+try:
+    import tqdm
+except:
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tqdm','-q'])
+    import tqdm
+from tqdm import tqdm
+for j in tqdm(range(10), desc=f'Setting Up..', leave=False):
+    time.sleep(0.2)
+subprocess.check_call([sys.executable,'-m', 'pip', 'install', '--upgrade', 'pip','-q'])
 try:
     import packaging
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'packaging'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'packaging','-q'])
 try:
     import pandas as pd
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install','pandas'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install','pandas','-q'])
     import pandas as pd
 try:
     import PIL
     import requests
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install','pillow'])
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'requests'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install','pillow','-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'requests','-q'])
     import PIL
     import requests
 try:
     import numpy as np
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install','numpy'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install','numpy','-q'])
     import numpy as np
 try:
     import xlrd
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'xlrd'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'xlrd','-q'])
     import xlrd
 try:
     import plotly
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'plotly'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'plotly','-q'])
+for j in tqdm(range(10), desc=f'Initializing Necessary Libraries..', leave=False):
+    time.sleep(0.2)
 try:
     import openpyxl
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'openpyxl'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'openpyxl','-q'])
+    import openpyxl
 try:
     import scipy
     from scipy.signal import find_peaks, peak_widths
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'scipy'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'scipy','-q'])
     import scipy
     from scipy.signal import find_peaks, peak_widths
 try:
     import matplotlib.pyplot as plt
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'matplotlib'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'matplotlib','-q'])
     import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = 'browser'
+for j in tqdm(range(5), desc=f'Setup Complete', leave=False):
+    time.sleep(0.2)
 ########################################################################################################################
 
 
@@ -67,6 +81,8 @@ class MeltcurveInterpreter:
         # Data Frame after processed
         self.transformed_data = pd.DataFrame()
         self.processed_data = pd.DataFrame()
+        for j in tqdm(range(2), desc=f'Initializing..', leave=False):
+            time.sleep(0.2)
 
     def plot(self, data):
 
@@ -125,6 +141,9 @@ class MeltcurveInterpreter:
         fig.show()
 
     def data_read(self, path, labels=False, index=False, figure=False):
+        from tqdm import tqdm
+        for j in tqdm(range(10), desc=f'Loading data', leave=False):
+            time.sleep(0.1)
         try:
             try:
                 return_data = pd.read_excel(path, engine='xlrd')
