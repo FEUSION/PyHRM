@@ -138,6 +138,10 @@ class MeltcurveInterpreter:
                                       yanchor="bottom")]
         fig.show()
 
+    def save_path(self):
+        path = input("Enter the path to save: ")
+        return path
+
     def data_read(self, path, labels=False, index=False, figure=False):
 
         from tqdm import tqdm
@@ -154,16 +158,31 @@ class MeltcurveInterpreter:
         if index:
             return_data.drop(return_data.columns[0], axis =1, inplace= True)
 
-        if not all([return_data.columns[0] == 'Text', return_data.columns[1] == 'X', return_data.columns[2] == 'Y',
-                    return_data.columns[3] == 'Text.1']):
-            raise ValueError("""Could not Load:
-                                1. Please check your input spreadsheet format. 
-                                    If your input file has index, please assign "index=True".
-                                2.Or Invalid File""")
-        labels = []
+        if len(return_data.columns)>3:
+            if not all([return_data.columns[0] == 'Text', return_data.columns[1] == 'X', return_data.columns[2] == 'Y',
+                        return_data.columns[3] == 'Text.1']):
+                raise ValueError("""Could not Load:
+                                    1. Please check your input spreadsheet format. 
+                                        If your input file has index, please assign "index=True".
+                                    2.Or Invalid File""")
+        elif len(return_data.columns) == 3:
+            if not all([return_data.columns[0] == 'Text', return_data.columns[1] == 'X', return_data.columns[2] == 'Y']):
+                raise ValueError("""Could not Load:
+                                    1. Please check your input spreadsheet format. 
+                                        If your input file has index, please assign "index=True".
+                                    2.Or Invalid File""")
+        else:
+            if not all([return_data.columns[0] == 'Text', return_data.columns[1] == 'X', return_data.columns[2] == 'Y',
+                        return_data.columns[3] == 'Text.1']):
+                raise ValueError("""Could not Load:
+                                    1. Please check your input spreadsheet format. 
+                                        If your input file has index, please assign "index=True".
+                                    2.Or Invalid File""")
+
+        li_labels = []
         for cols in return_data.iloc[:, 0::3].columns:
-            labels.append(return_data[cols].unique()[0])
-        self.labels = labels
+            li_labels.append(return_data[cols].unique()[0])
+        self.labels = li_labels
 
         dummy_data = pd.concat([return_data.iloc[:, 1], return_data.iloc[:, 2::3]], axis=1)
         del return_data
@@ -177,12 +196,6 @@ class MeltcurveInterpreter:
             return [self.transformed_data, np.array(self.labels).reshape(-1)]
         else:
             return self.transformed_data
-
-    def path_input(self):
-        self.path = input("Enter the path to save: ")
-        if ":" not in self.path:
-            print("Invalid path")
-            self.path = None
 
     def melt_convertion(self, figure = False, return_value = False, download=False):
         data_copy = self.transformed_data.copy()
@@ -199,15 +212,22 @@ class MeltcurveInterpreter:
         self.processed_data = new_df
 
         if figure:
-            self.plot(data = self.processed_data)
+            self.plot(data=self.processed_data)
+        if download:
+            saving_path = self.save_path()
+            try:
+                self.processed_data.to_csv(saving_path)
+                print("Download Successful")
+            except:
+                print("Download Failed")
 
         if return_value:
             return self.processed_data
 
-    def feature_detection(self):
+    def feature_detection(self, download = False):
         data = self.processed_data
         c1 = ['Tm1', 'Tstart1', 'Tend1', 'Height1', 'Difference1', 'Tm2', 'Tstart2', 'Tend2', 'Height2', 'Difference2',
-              'Tm3', 'Tstart3', 'Tend3', 'Height3', 'Difference3']
+              'Tm3', 'Tstart3', 'Tend3', 'Height3', 'Difference3','Target']
         features_data = pd.DataFrame(columns=c1)
         n = 3
         for k in range(1, len(data.columns)):
@@ -270,7 +290,15 @@ class MeltcurveInterpreter:
             else:
                 features_data.loc[k, ['Difference1', 'Difference2', 'Difference3']] = *list(
                     np.array(end_indices) - np.array(start_indices)),
+            features_data.loc[k, 'Target'] = self.labels[k-1]
 
+        if download:
+            saving_path = self.save_path()
+            try:
+                features_data.to_csv(saving_path)
+                print("Download Successful")
+            except:
+                print("Download Failed")
         return features_data
 
 
