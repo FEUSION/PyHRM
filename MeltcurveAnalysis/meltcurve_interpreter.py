@@ -78,6 +78,7 @@ class MeltcurveInterpreter:
     def __init__(self):
         # lables
         # Data Frame after processed
+        self.labels = []
         self.transformed_data = pd.DataFrame()
         self.processed_data = pd.DataFrame()
         for j in tqdm(range(2), desc=f'Initializing..', leave=False):
@@ -140,7 +141,7 @@ class MeltcurveInterpreter:
         fig.show()
 
     def data_read(self, path, labels=False, index=False, figure=False):
-        self.labels = []
+        del self.labels
         from tqdm import tqdm
         for j in tqdm(range(10), desc=f'Loading data', leave=False):
             time.sleep(0.1)
