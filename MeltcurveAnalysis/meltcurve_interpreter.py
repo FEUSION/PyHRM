@@ -100,7 +100,7 @@ class MeltcurveInterpreter:
     def __init__(self):
         self.labels = []
         self.transformed_data = pd.DataFrame()
-        self.model = load_model('Melt.h5')
+        self.model = load_model('Melt.h5', compile=False)
         for j in tqdm(range(2), desc=f'Initializing..', leave=False):
             time.sleep(0.2)
 
