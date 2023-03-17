@@ -1,9 +1,11 @@
 ########################################################################################################################
 ##Importing Libraries
 import time
+from datetime import datetime
 import sys
 import subprocess
 import warnings
+import os
 warnings.filterwarnings('ignore')
 try:
     import io
@@ -43,6 +45,11 @@ try:
 except:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install','numpy','-q'])
     import numpy as np
+try:
+    import kaleido
+except:
+    subprocess.check_call([sys.executable,'-m','pip','install','-U','kaleido','-q'])
+    import kaleido
 try:
     import xlrd
 except:
@@ -86,6 +93,16 @@ except:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'matplotlib','-q'])
     import matplotlib.pyplot as plt
     from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+try:
+    import fpdf
+    from fpdf import FPDF
+    import tempfile
+except:
+    subprocess.check_call([sys.executable, '-m','pip','install', 'FPDF','-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tempfile', '-q'])
+    import fpdf
+    from fpdf import FPDF
+    import tempfile
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
@@ -104,7 +121,7 @@ class MeltcurveInterpreter:
         for j in tqdm(range(2), desc=f'Initializing..', leave=False):
             time.sleep(0.2)
 
-    def plot(self, data):
+    def plot(self, data, save = False):
 
         from PIL import Image
         import requests
@@ -159,6 +176,8 @@ class MeltcurveInterpreter:
                                       sizey=0.20,
                                       xanchor="center",
                                       yanchor="bottom")]
+        if save:
+            return fig
         fig.show()
 
     def save_path(self):
@@ -166,7 +185,7 @@ class MeltcurveInterpreter:
         return path
 
     def data_read(self, path, labels=False, index=False, figure=False):
-
+        self.path = path
         from tqdm import tqdm
         for j in tqdm(range(10), desc=f'Loading data', leave=False):
             time.sleep(0.1)
@@ -250,10 +269,10 @@ class MeltcurveInterpreter:
         if return_value:
             return processed_data
 
-    def feature_detection(self,download=False):
+    def feature_detection(self,download=False, report = False):
         data = self.transformed_data
-        c1 = ['Tm1', 'Tstart1', 'Tend1', 'Prominence1', 'Difference1', 'AUC1', 'Tm2', 'Tstart2', 'Tend2', 'Prominence2',
-              'Difference2', 'AUC2', 'Target']
+        c1 = ['Tm1', 'Tstart1', 'Tend1', 'Prom1', 'Width1', 'AUC1', 'Tm2', 'Tstart2', 'Tend2', 'Prom2',
+              'Width2', 'AUC2', 'Target']
         max_peaks_of_all_curves = []
         features_data = pd.DataFrame(columns=c1)
         n = 3
@@ -358,17 +377,78 @@ class MeltcurveInterpreter:
                     features_data.loc[k, 'AUC' + str(ite)] = 0.0
             features_data.loc[k,'Target'] = self.labels[k - 1]
 
-        maximum = np.sort(features_data['Prominence1'].to_numpy())[-1]
+        maximum = np.sort(features_data['Prom1'].to_numpy())[-1]
         for i in range(1, features_data.shape[0] + 1):
-            if features_data.loc[i, 'Prominence1'] < maximum * 0.04:
+            if features_data.loc[i, 'Prom1'] < maximum * 0.04:
                 features_data.loc[i, features_data.columns] = [0.0 for _ in range(13)]
                 features_data.loc[i, 'Target'] = self.labels[i - 1]
         if download:
+            print("Only supports .csv format for now")
             saving_path = self.save_path()
             try:
                 features_data.to_csv(saving_path)
                 print("Download Successful")
             except:
                 print("Download Failed")
+
+        if report:
+            dataa = features_data.copy()
+            for cols in dataa.columns[:-1]:
+                dataa[cols] = dataa[cols].apply(lambda x: round(x, 2))
+            graph = self.plot(self.transformed_data, save=True)
+            with tempfile.NamedTemporaryFile(delete=False) as f:
+                graph.write_image(f.name, format='png', width=1000)
+                temp_image_file = f.name
+
+            class PDF(FPDF):
+                def __init__(self):
+                    super().__init__()
+
+                def header(self):
+                    self.set_font('Arial', '', 12)
+                    self.cell(0, 0, '', 0, 1, 'C')
+
+                def footer(self):
+                    self.set_y(-15)
+                    self.set_font('Arial', '', 12)
+
+            pdf = PDF()
+            pdf.add_page()
+            pdf.set_font('Arial', 'B', 24)
+            pdf.cell(w=0, h=15, txt="Melt Signal Processing", ln=1)
+            pdf.ln(2)
+            pdf.set_font('Arial', '', 10)
+            pdf.cell(w=30, h=5, txt="Date: ", ln=0)
+            pdf.cell(w=30, h=5, txt=str(datetime.now().strftime("%d/%m/%Y")), ln=1)
+            pdf.cell(w=30, h=5, txt="File: ", ln=0)
+            pdf.cell(w=30, h=5, txt=str(self.path.split('\\')[-1]), ln=1)
+            pdf.ln(5)
+            pdf.image(temp_image_file, x=1, y=None, w=200, h=95, type='PNG', link='')
+
+            # Table contents
+            pdf.set_font('Arial', '', 9)
+            for cols in dataa.columns:
+                pdf.cell(15, 10, cols, 1)
+            pdf.ln(1.8)
+            for index, row in dataa.iterrows():
+                pdf.ln(8)
+                pdf.cell(15, 8, str(row['Tm1']), 1)
+                pdf.cell(15, 8, str(row['Tstart1']), 1)
+                pdf.cell(15, 8, str(row['Tend1']), 1)
+                pdf.cell(15, 8, str(row['Prom1']), 1)
+                pdf.cell(15, 8, str(row['Width1']), 1)
+                pdf.cell(15, 8, str(row['AUC1']), 1)
+                pdf.cell(15, 8, str(row['Tm2']), 1)
+                pdf.cell(15, 8, str(row['Tstart2']), 1)
+                pdf.cell(15, 8, str(row['Tend2']), 1)
+                pdf.cell(15, 8, str(row['Prom2']), 1)
+                pdf.cell(15, 8, str(row['Width2']), 1)
+                pdf.cell(15, 8, str(row['AUC2']), 1)
+                pdf.cell(15, 8, str(row['Target']), 1)
+            saving_path2 = self.save_path()
+            pdf.output(saving_path2, 'F')
+            os.remove(temp_image_file)
+
+
         return features_data
 
