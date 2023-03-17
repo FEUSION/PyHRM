@@ -6,6 +6,11 @@ import subprocess
 import warnings
 warnings.filterwarnings('ignore')
 try:
+    import io
+except:
+    subprocess.check_call([sys.executable,'-m', 'pip', 'install', 'io', '-q'])
+    import io
+try:
     import tqdm
 except:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tqdm','-q'])
@@ -25,11 +30,13 @@ except:
     import pandas as pd
 try:
     import PIL
+    from PIL import Image
     import requests
 except:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install','pillow','-q'])
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'requests','-q'])
     import PIL
+    from PIL import Image
     import requests
 try:
     import numpy as np
@@ -54,16 +61,31 @@ except:
     import openpyxl
 try:
     import scipy
-    from scipy.signal import find_peaks, peak_widths
+    from scipy.signal import find_peaks, peak_widths, peak_prominences
+    from scipy.integrate import simpson
 except:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'scipy','-q'])
     import scipy
-    from scipy.signal import find_peaks, peak_widths
+    from scipy.signal import find_peaks, peak_widths, peak_prominences
+    from scipy.integrate import simpson
+try:
+    import tensorflow
+    import keras
+    from keras.models import load_model
+except:
+    print("Keras is a required component of this package \n Installing Keras..\n This a may take a while..")
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-U','tensorflow==2.12.0rc0'])
+    subprocess.check_call([sys.executable, '-m','pip', 'install','-U','keras'])
+    import tensorflow
+    import keras
+    from keras.models import load_model
 try:
     import matplotlib.pyplot as plt
+    from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 except:
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'matplotlib','-q'])
     import matplotlib.pyplot as plt
+    from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
@@ -78,7 +100,7 @@ class MeltcurveInterpreter:
     def __init__(self):
         self.labels = []
         self.transformed_data = pd.DataFrame()
-        self.processed_data = pd.DataFrame()
+        self.model = load_model('Melt.h5')
         for j in tqdm(range(2), desc=f'Initializing..', leave=False):
             time.sleep(0.2)
 
@@ -120,7 +142,8 @@ class MeltcurveInterpreter:
                               legend_title_font_size=18,
                               legend_bgcolor="#f1f1f1",
                               legend_borderwidth=1,
-                              plot_bgcolor='#000000',
+
+                              plot_bgcolor='#ffffff',
                               title_font_color="#417a41",
                               )
             fig.update_xaxes(title_text =xtitle,
@@ -179,9 +202,12 @@ class MeltcurveInterpreter:
                                         If your input file has index, please assign "index=True".
                                     2.Or Invalid File""")
 
-        li_labels = []
-        for cols in return_data.iloc[:, 0::3].columns:
-            li_labels.append(return_data[cols].unique()[0])
+        # li_labels = []
+        # for cols in return_data.iloc[:, 0::3].columns:
+        #     li_labels.append(return_data[cols].unique()[0])
+        # self.labels = li_labels
+
+        li_labels = return_data.iloc[:,0::3].loc[1].apply(lambda x : str(x).split()[-1]).to_list()
         self.labels = li_labels
 
         dummy_data = pd.concat([return_data.iloc[:, 1], return_data.iloc[:, 2::3]], axis=1)
@@ -209,89 +235,134 @@ class MeltcurveInterpreter:
         for cols in data_copy[1:]:
             splrep = scipy.interpolate.splrep(data_copy.iloc[:,0], data_copy[cols], s = 0.031)
             new_df[cols] = scipy.interpolate.splev(xnew,splrep)
-        self.processed_data = new_df
+        processed_data = new_df
 
         if figure:
-            self.plot(data=self.processed_data)
+            self.plot(data=processed_data)
         if download:
             saving_path = self.save_path()
             try:
-                self.processed_data.to_csv(saving_path)
+                processed_data.to_csv(saving_path)
                 print("Download Successful")
             except:
                 print("Download Failed")
 
         if return_value:
-            return self.processed_data
+            return processed_data
 
-    def feature_detection(self, download = False):
-        data = self.processed_data
-        c1 = ['Tm1', 'Tstart1', 'Tend1', 'Height1', 'Difference1', 'Tm2', 'Tstart2', 'Tend2', 'Height2', 'Difference2',
-              'Tm3', 'Tstart3', 'Tend3', 'Height3', 'Difference3','Target']
+    def feature_detection(self,download=False):
+        data = self.transformed_data
+        c1 = ['Tm1', 'Tstart1', 'Tend1', 'Prominence1', 'Difference1', 'AUC1', 'Tm2', 'Tstart2', 'Tend2', 'Prominence2',
+              'Difference2', 'AUC2', 'Target']
+        max_peaks_of_all_curves = []
         features_data = pd.DataFrame(columns=c1)
         n = 3
+        max_peaks_of_all_curves = []
         for k in range(1, len(data.columns)):
+            x = data.iloc[:, 0].to_numpy()
+            y = data.iloc[:, k].to_numpy()
 
-            #find peaks
-            peaks = find_peaks(data.iloc[:, k], float((data.iloc[:, k].max()) * 0.25))
+            peaks, _ = find_peaks(y)
+            # prominences
+            proms = peak_prominences(y, peaks)[0]
+            # sort the prominences in descending order
+            desc_proms = np.argsort(proms)[::-1][:2]
 
-            sorted_heights = np.sort(list(peaks[1].values())[0])[::-1]
-            sorted_x = [float(data.iloc[:, 0][data.iloc[:, k] == o]) for o in sorted_heights]
-            final_peaks = [data.iloc[:, 0][data.iloc[:, 0] == t].index[0] for t in sorted_x][:n]
-            sorted_heights = sorted_heights[:n]
-            sorted_x = sorted_x[:n]
+            peaks = [peaks[u] for u in desc_proms]
+            proms = [proms[l] for l in desc_proms]
+            peak_tempeartures = [x[peak] for peak in peaks]
 
-            #peak width
-            res = peak_widths(data.iloc[:, k], final_peaks, rel_height=0.75)
+            width_data = np.array(peak_widths(y, peaks, rel_height=0.75)).T
+            if len(width_data) > 0:
+                first_highest_peak_att = width_data[0]
+            if len(width_data) > 1:
+                second_highest_peak_att = width_data[1]
 
-            start_indices = [data.iloc[round(ele), 0] for ele in res[2]]
-            end_indices = [data.iloc[round(ele), 0] for ele in res[3]]
-            final_res = (res[1], start_indices, end_indices)
+            # third_highest_peak_att = width_data[2]
 
-            if len(sorted_x) != 3:
-                if len(sorted_x) == 1:
-                    features_data.loc[k, ['Tm1', 'Tm2', 'Tm3']] = [*sorted_x, 0, 0]
+            def plot(x, y):
+                fig, ax = plt.subplots()
+                ax.plot(x, y)
+                ax.set_xticks([])
+                ax.set_yticks([])
+                ax.set_axis_off()
+                canvas = FigureCanvas(fig)
+                png_output = io.BytesIO()
+                canvas.print_png(png_output)
+                png_output.seek(0)
+                pil_image = Image.open(png_output)
+                plt.close()
+                plt.clf()
+                return pil_image
+
+            img = plot(x, y)
+            img = img.resize((30, 30))
+            img = np.array(img.convert("RGB"))
+            img = img.reshape(1, 30, 30, 3)
+            prediction = np.argmax(self.model.predict(img, verbose=0))
+
+            if prediction == 0:
+                features_data.loc[k, c1] = [0.0 for _ in range(len(c1))]
+                features_data.loc[k, 'Target'] = self.labels[k-1]
+
+            if prediction == 1:
+                if len(first_highest_peak_att) == 0:
+                    features_data.loc[k, c1] = [0.0 for _ in range(len(c1))]
                 else:
-                    features_data.loc[k, ['Tm1', 'Tm2', 'Tm3']] = [*sorted_x, 0]
-            else:
-                features_data.loc[k, ['Tm1', 'Tm2', 'Tm3']] = *sorted_x,
+                    width, prominence, start, end = *first_highest_peak_att,
+                    start = x[round(start)]
+                    end = x[round(end)]
+                    features_data.loc[k, c1[:5]] = [peak_tempeartures[0], start, end, prominence, width]
+                    features_data.loc[k, c1[5:]] = [0.0 for _ in range(len(c1[5:]))]
 
-            if len(start_indices) != 3:
-                if len(start_indices) == 1:
-                    features_data.loc[k, ['Tstart1', 'Tstart2', 'Tstart3']] = [*start_indices, 0, 0]
+            if prediction == 2:
+                if len(first_highest_peak_att) == 0:
+                    features_data.loc[k, c1] = [0.0 for _ in range(len(c1))]
+
                 else:
-                    features_data.loc[k, ['Tstart1', 'Tstart2', 'Tstart3']] = [*start_indices, 0]
-            else:
-                features_data.loc[k, ['Tstart1', 'Tstart2', 'Tstart3']] = *start_indices,
+                    width, prominence, start, end = *first_highest_peak_att,
+                    width1, prominence1, start1, end1 = *second_highest_peak_att,
 
-            if len(end_indices) != 3:
-                if len(end_indices) == 1:
-                    features_data.loc[k, ['Tend1', 'Tend2', 'Tend3']] = [*end_indices, 0, 0]
-                else:
-                    features_data.loc[k, ['Tend1', 'Tend2', 'Tend3']] = [*end_indices, 0]
-            else:
-                features_data.loc[k, ['Tend1', 'Tend2', 'Tend3']] = *end_indices,
+                    if prominence1 < prominence * 0.25:
+                        start = x[round(start)]
+                        end = x[round(end)]
+                        features_data.loc[k, c1[:5]] = [peak_tempeartures[0], start, end, prominence, width]
+                        features_data.loc[k, c1[5:]] = [0.0 for _ in range(len(c1[5:]))]
 
-            if len(sorted_heights) != 3:
-                if len(sorted_heights) == 1:
-                    features_data.loc[k, ['Height1', 'Height2', 'Height3']] = [*sorted_heights, 0, 0]
-                else:
-                    features_data.loc[k, ['Height1', 'Height2', 'Height3']] = [*sorted_heights, 0]
-            else:
-                features_data.loc[k, ['Height1', 'Height2', 'Height3']] = *sorted_heights,
+                    else:
+                        start = x[round(start)]
+                        end = x[round(end)]
+                        start1 = x[round(start1)]
+                        end1 = x[round(end1)]
+                        features_data.loc[k, c1[:5]] = [peak_tempeartures[0], start, end, prominence, width]
+                        features_data.loc[k, c1[6:11]] = [peak_tempeartures[1], start1, end1, prominence1, width1]
+                        features_data.loc[k, c1[11:]] = [0.0 for _ in range(len(c1[11:]))]
 
-            if len(list(np.array(end_indices) - np.array(start_indices))) != 3:
-                if len(list(np.array(end_indices) - np.array(start_indices))) == 1:
-                    features_data.loc[k, ['Difference1', 'Difference2', 'Difference3']] = [
-                        *list(np.array(end_indices) - np.array(start_indices)), 0, 0]
-                else:
-                    features_data.loc[k, ['Difference1', 'Difference2', 'Difference3']] = [
-                        *list(np.array(end_indices) - np.array(start_indices)), 0]
-            else:
-                features_data.loc[k, ['Difference1', 'Difference2', 'Difference3']] = *list(
-                    np.array(end_indices) - np.array(start_indices)),
-            features_data.loc[k, 'Target'] = self.labels[k-1]
+            temp_range = data.iloc[:, 0]
 
+            def aidsimpson(temp_range, k, features_data,column1, column2):
+                Tstartindex = temp_range[temp_range == features_data.loc[k, column1]].index[0]
+                Tendindex = temp_range[temp_range == features_data.loc[k, column2]].index[0]
+                return [Tstartindex, Tendindex]
+
+            columns1 = ['Tstart1', 'Tstart2', 'Tstart3']
+            columns2 = ['Tend1', 'Tend2', 'Tend3']
+
+            for ite in range(1, 3):
+                try:
+                    indexes = aidsimpson(temp_range, k, features_data, column1=columns1[ite - 1],
+                                         column2=columns2[ite - 1])
+                    features_data.loc[k, 'AUC' + str(ite)] = simpson(data.iloc[indexes[0]:indexes[1], k].to_numpy(),
+                                                                     data.iloc[indexes[0]:indexes[1], 0].to_numpy())
+                except:
+                    features_data.loc[k, 'AUC' + str(ite)] = 0.0
+            features_data.loc[k,'Target'] = self.labels[k - 1]
+
+        maximum = np.sort(features_data['Prominence1'].to_numpy())[-1]
+        for i in range(1, features_data.shape[0] + 1):
+            if features_data.loc[i, 'Prominence1'] < maximum * 0.04:
+                features_data.loc[i, features_data.columns] = [0.0 for _ in range(13)]
+                features_data.loc[i, 'Target'] = self.labels[i - 1]
         if download:
             saving_path = self.save_path()
             try:
@@ -300,5 +371,4 @@ class MeltcurveInterpreter:
             except:
                 print("Download Failed")
         return features_data
-
 
