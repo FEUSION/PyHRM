@@ -115,9 +115,14 @@ for j in tqdm(range(5), desc=f'Setup Complete', leave=False):
 class MeltcurveInterpreter:
 
     def __init__(self):
+        cwd = os.getcwd()
+        if 'MeltcurveAnalysis' in cwd:
+            model_path = os.path.join(cwd,'Melt.h5')
+        else:
+            model_path = os.path.join(cwd,'MeltcurveAnalysis','Melt.h5')
         self.labels = []
         self.transformed_data = pd.DataFrame()
-        self.model = load_model('Melt.h5', compile=False)
+        self.model = load_model(model_path, compile=False)
         for j in tqdm(range(2), desc=f'Initializing..', leave=False):
             time.sleep(0.2)
 
