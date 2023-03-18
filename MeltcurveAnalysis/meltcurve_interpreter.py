@@ -1,6 +1,7 @@
 ########################################################################################################################
 ##Importing Libraries
 import time
+import site
 from datetime import datetime
 import sys
 import subprocess
@@ -94,13 +95,11 @@ except:
     import matplotlib.pyplot as plt
     from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 try:
-    import fpdf
     from fpdf import FPDF
     import tempfile
 except:
     subprocess.check_call([sys.executable, '-m','pip','install', 'FPDF','-q'])
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tempfile', '-q'])
-    import fpdf
     from fpdf import FPDF
     import tempfile
 import plotly.graph_objects as go
@@ -116,10 +115,11 @@ class MeltcurveInterpreter:
 
     def __init__(self):
         cwd = os.getcwd()
+        actuall_path = site.getsitepackages()[1]
         if 'MeltcurveAnalysis' in cwd:
             model_path = os.path.join(cwd,'Melt.h5')
         else:
-            model_path = os.path.join(cwd,'MeltcurveAnalysis','Melt.h5')
+            model_path = os.path.join(actuall_path,'MeltcurveAnalysis','Melt.h5')
         self.labels = []
         self.transformed_data = pd.DataFrame()
         self.model = load_model(model_path, compile=False)
