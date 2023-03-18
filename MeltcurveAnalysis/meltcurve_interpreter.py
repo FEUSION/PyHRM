@@ -233,7 +233,11 @@ class MeltcurveInterpreter:
 
         li_labels = return_data.iloc[:,0::3].loc[1].apply(lambda x : str(x).split()[-1]).to_list()
         self.labels = li_labels
-
+        try:
+            sampleid = return_data.iloc[:,0::3].loc[1].apply(lambda x : str(x).split()[1]).to_list()
+            self.sampleid = sampleid
+        except:
+            self.sampleid = ['NA' for _ in range(return_data.iloc[:,0::3].shape[1])]
         dummy_data = pd.concat([return_data.iloc[:, 1], return_data.iloc[:, 2::3]], axis=1)
         del return_data
         return_data = dummy_data
@@ -274,7 +278,7 @@ class MeltcurveInterpreter:
         if return_value:
             return processed_data
 
-    def feature_detection(self,download=False, report = False):
+    def feature_detection(self,download=False, return_values = False):
         data = self.transformed_data
         c1 = ['Tm1', 'Tstart1', 'Tend1', 'Prom1', 'Width1', 'AUC1', 'Tm2', 'Tstart2', 'Tend2', 'Prom2',
               'Width2', 'AUC2', 'Target']
@@ -395,65 +399,95 @@ class MeltcurveInterpreter:
                 print("Download Successful")
             except:
                 print("Download Failed")
+        self.signal_processing_data = features_data
 
-        if report:
-            dataa = features_data.copy()
-            for cols in dataa.columns[:-1]:
-                dataa[cols] = dataa[cols].apply(lambda x: round(x, 2))
-            graph = self.plot(self.transformed_data, save=True)
-            with tempfile.NamedTemporaryFile(delete=False) as f:
-                graph.write_image(f.name, format='png', width=1000)
-                temp_image_file = f.name
-
-            class PDF(FPDF):
-                def __init__(self):
-                    super().__init__()
-
-                def header(self):
-                    self.set_font('Arial', '', 12)
-                    self.cell(0, 0, '', 0, 1, 'C')
-
-                def footer(self):
-                    self.set_y(-15)
-                    self.set_font('Arial', '', 12)
-
-            pdf = PDF()
-            pdf.add_page()
-            pdf.set_font('Arial', 'B', 24)
-            pdf.cell(w=0, h=15, txt="Melt Signal Processing", ln=1)
-            pdf.ln(2)
-            pdf.set_font('Arial', '', 10)
-            pdf.cell(w=30, h=5, txt="Date: ", ln=0)
-            pdf.cell(w=30, h=5, txt=str(datetime.now().strftime("%d/%m/%Y")), ln=1)
-            pdf.cell(w=30, h=5, txt="File: ", ln=0)
-            pdf.cell(w=30, h=5, txt=str(self.path.split('\\')[-1]), ln=1)
-            pdf.ln(5)
-            pdf.image(temp_image_file, x=1, y=None, w=200, h=95, type='PNG', link='')
-
-            # Table contents
-            pdf.set_font('Arial', '', 9)
-            for cols in dataa.columns:
-                pdf.cell(15, 10, cols, 1)
-            pdf.ln(1.8)
-            for index, row in dataa.iterrows():
-                pdf.ln(8)
-                pdf.cell(15, 8, str(row['Tm1']), 1)
-                pdf.cell(15, 8, str(row['Tstart1']), 1)
-                pdf.cell(15, 8, str(row['Tend1']), 1)
-                pdf.cell(15, 8, str(row['Prom1']), 1)
-                pdf.cell(15, 8, str(row['Width1']), 1)
-                pdf.cell(15, 8, str(row['AUC1']), 1)
-                pdf.cell(15, 8, str(row['Tm2']), 1)
-                pdf.cell(15, 8, str(row['Tstart2']), 1)
-                pdf.cell(15, 8, str(row['Tend2']), 1)
-                pdf.cell(15, 8, str(row['Prom2']), 1)
-                pdf.cell(15, 8, str(row['Width2']), 1)
-                pdf.cell(15, 8, str(row['AUC2']), 1)
-                pdf.cell(15, 8, str(row['Target']), 1)
-            saving_path2 = self.save_path()
-            pdf.output(saving_path2, 'F')
-            os.remove(temp_image_file)
+        if return_values:
+            return features_data
 
 
-        return features_data
+    def report(self):
+        dataa = self.signal_processing_data.copy()
+        for cols in dataa.columns[:-1]:
+            dataa[cols] = dataa[cols].apply(lambda x: round(x, 2))
 
+        data_len = self.transformed_data.shape[1]-1
+        rows = int(np.ceil(np.sqrt(data_len)))
+        cols = int(np.ceil(data_len/rows))
+        # rows = int(np.ceil(data_len/3))
+        # cols = 3
+
+        # single_subplot_width = float(cols)
+        # single_subplot_height = float(rows)
+
+        # fig_width = cols * single_subplot_width
+        # fig_height = rows * single_subplot_height
+
+        plt.style.use('ggplot')
+        figure, axs = plt.subplots(ncols=cols, nrows=rows)
+        for i, axs in enumerate(axs.flatten()):
+            if i < data_len:
+                axs.plot(self.transformed_data.iloc[:,0],self.transformed_data.iloc[:,i+1],color = 'blue')
+                axs.set_title(f'{self.labels[i]}', fontsize =10)
+            else:
+                figure.delaxes(axs)
+        figure.tight_layout()
+        canvas2 = FigureCanvas(figure)
+        png_output2 = io.BytesIO()
+        canvas2.print_png(png_output2)
+        png_output2.seek(0)
+        pil_image2 = Image.open(png_output2)
+        with tempfile.NamedTemporaryFile(delete=False) as f:
+            pil_image2.save(f.name, format='PNG')
+            temp_image_file = f.name
+        plt.close()
+        plt.clf()
+
+
+        class PDF(FPDF):
+            def __init__(self):
+                super().__init__()
+
+            def header(self):
+                self.set_font('Arial', '', 12)
+                self.cell(0, 0, '', 0, 1, 'C')
+
+            def footer(self):
+                self.set_y(-15)
+                self.set_font('Arial', '', 12)
+
+        pdf = PDF()
+        pdf.add_page()
+        pdf.set_font('Arial', 'B', 24)
+        pdf.cell(w=0, h=15, txt="Melt Signal Processing", ln=1)
+        pdf.ln(2)
+        pdf.set_font('Arial', '', 10)
+        pdf.cell(w=30, h=5, txt="Date: ", ln=0)
+        pdf.cell(w=30, h=5, txt=str(datetime.now().strftime("%d/%m/%Y")), ln=1)
+        pdf.cell(w=30, h=5, txt="File: ", ln=0)
+        pdf.cell(w=30, h=5, txt=str(self.path.split('\\')[-1]), ln=1)
+        pdf.ln(5)
+        pdf.image(temp_image_file, x=1, y=None, w=200, h=150, type='PNG', link='')
+        pdf.ln(3)
+        # Table contents
+        pdf.set_font('Arial', '', 9)
+        for cols in dataa.columns:
+            pdf.cell(15, 10, cols, 1)
+        pdf.ln(1.8)
+        for index, row in dataa.iterrows():
+            pdf.ln(8)
+            pdf.cell(15, 8, str(row['Tm1']), 1)
+            pdf.cell(15, 8, str(row['Tstart1']), 1)
+            pdf.cell(15, 8, str(row['Tend1']), 1)
+            pdf.cell(15, 8, str(row['Prom1']), 1)
+            pdf.cell(15, 8, str(row['Width1']), 1)
+            pdf.cell(15, 8, str(row['AUC1']), 1)
+            pdf.cell(15, 8, str(row['Tm2']), 1)
+            pdf.cell(15, 8, str(row['Tstart2']), 1)
+            pdf.cell(15, 8, str(row['Tend2']), 1)
+            pdf.cell(15, 8, str(row['Prom2']), 1)
+            pdf.cell(15, 8, str(row['Width2']), 1)
+            pdf.cell(15, 8, str(row['AUC2']), 1)
+            pdf.cell(15, 8, str(row['Target']), 1)
+        saving_path2 = self.save_path()
+        pdf.output(saving_path2, 'F')
+        os.remove(temp_image_file)
