@@ -122,7 +122,7 @@ class MeltcurveInterpreter:
         cwd = os.getcwd()
         actuall_path = site.getsitepackages()[1]
         if 'MeltcurveAnalysis' in cwd:
-            model_path = os.path.join(cwd, 'Melt.h5')
+            model_path = os.path.join(cwd, '../Melt.h5')
         else:
             model_path = os.path.join(actuall_path, 'MeltcurveAnalysis', 'Melt2_0.h5')
         self.labels = []
