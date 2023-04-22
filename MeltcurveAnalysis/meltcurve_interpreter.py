@@ -7,74 +7,72 @@ import sys
 import subprocess
 import warnings
 import os
-
 warnings.filterwarnings('ignore')
 try:
     import io
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'io', '-q'])
+    subprocess.check_call([sys.executable,'-m', 'pip', 'install', 'io', '-q'])
     import io
 try:
     import tqdm
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tqdm', '-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tqdm','-q'])
     import tqdm
 from tqdm import tqdm
-
 for j in tqdm(range(10), desc=f'Setting Up..', leave=False):
     time.sleep(0.2)
-subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'pip', '-q'])
+subprocess.check_call([sys.executable,'-m', 'pip', 'install', '--upgrade', 'pip','-q'])
 try:
     import packaging
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'packaging', '-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'packaging','-q'])
 try:
     import pandas as pd
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pandas', '-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install','pandas','-q'])
     import pandas as pd
 try:
     import PIL
     from PIL import Image
     import requests
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pillow', '-q'])
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'requests', '-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install','pillow','-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'requests','-q'])
     import PIL
     from PIL import Image
     import requests
 try:
     import numpy as np
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'numpy', '-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install','numpy','-q'])
     import numpy as np
 try:
     import kaleido
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-U', 'kaleido', '-q'])
+    subprocess.check_call([sys.executable,'-m','pip','install','-U','kaleido','-q'])
     import kaleido
 try:
     import xlrd
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'xlrd', '-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'xlrd','-q'])
     import xlrd
 try:
     import plotly
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'plotly', '-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'plotly','-q'])
 for j in tqdm(range(10), desc=f'Initializing Necessary Libraries..', leave=False):
     time.sleep(0.2)
 try:
     import openpyxl
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'openpyxl', '-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'openpyxl','-q'])
     import openpyxl
 try:
     import scipy
     from scipy.signal import find_peaks, peak_widths, peak_prominences
     from scipy.integrate import simpson
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'scipy', '-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'scipy','-q'])
     import scipy
     from scipy.signal import find_peaks, peak_widths, peak_prominences
     from scipy.integrate import simpson
@@ -84,8 +82,8 @@ try:
     from keras.models import load_model
 except:
     print("Keras is a required component of this package \n Installing Keras..\n This a may take a while..")
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-U', 'tensorflow==2.12.0rc0'])
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-U', 'keras'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-U','tensorflow==2.12.0rc0'])
+    subprocess.check_call([sys.executable, '-m','pip', 'install','-U','keras'])
     import tensorflow
     import keras
     from keras.models import load_model
@@ -93,26 +91,23 @@ try:
     import matplotlib.pyplot as plt
     from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'matplotlib', '-q'])
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'matplotlib','-q'])
     import matplotlib.pyplot as plt
     from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 try:
     from fpdf import FPDF
     import tempfile
 except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'FPDF', '-q'])
+    subprocess.check_call([sys.executable, '-m','pip','install', 'FPDF','-q'])
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tempfile', '-q'])
     from fpdf import FPDF
     import tempfile
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
-
 pio.renderers.default = 'browser'
 for j in tqdm(range(5), desc=f'Setup Complete', leave=False):
     time.sleep(0.2)
-
-
 ########################################################################################################################
 
 
@@ -122,33 +117,32 @@ class MeltcurveInterpreter:
         cwd = os.getcwd()
         actuall_path = site.getsitepackages()[1]
         if 'MeltcurveAnalysis' in cwd:
-            model_path = os.path.join(cwd, '../Melt.h5')
+            model_path = os.path.join(cwd,'Melt_2.0.h5')
         else:
-            model_path = os.path.join(actuall_path, 'MeltcurveAnalysis', 'Melt2_0.h5')
+            model_path = os.path.join(actuall_path,'MeltcurveAnalysis','Melt2_0.h5')
         self.labels = []
         self.transformed_data = pd.DataFrame()
         self.model = load_model(model_path, compile=False)
         for j in tqdm(range(2), desc=f'Initializing..', leave=False):
             time.sleep(0.2)
 
-    def plot(self, data, save=False):
+    def plot(self, data, save = False):
 
         from PIL import Image
         import requests
         from io import BytesIO
-        response = requests.get("https://microlabindia.com/wp-content/uploads/2022/06/MBL-Logo.png")
-        img = Image.open(BytesIO(response.content))
+        
 
         fig = go.Figure()
         for X in range(1, len(data.columns)):
             fig.add_trace(go.Scatter(x=data.iloc[:, 0],
                                      y=data.iloc[:, X],
-                                     name=self.labels[X - 1]))
-            if data.iloc[1, 1] > 20.0:
+                                     name=self.labels[X-1]))
+            if data.iloc[1,1]>20.0:
                 title = "<i><b>Raw Fluorescence Curve</b></i>"
                 ytitle = "Fluorescence"
                 xtitle = 'Temperature in Celsius'
-            elif data.iloc[0, 0] == 1:
+            elif data.iloc[0,0]==1:
                 title = "<i><b>Amplification Curve</b></i>"
                 ytitle = "Normalized Fluorescence"
                 xtitle = 'Cycle Time'
@@ -157,7 +151,7 @@ class MeltcurveInterpreter:
                 ytitle = 'dF/dT'
                 xtitle = 'Temperature in Celsius'
             fig.update_layout(title_text=(title),
-                              title_x=0.5,
+                              title_x = 0.5,
                               title_font_size=30,
                               title_font_family='Arial',
                               legend_itemclick="toggleothers",
@@ -173,19 +167,11 @@ class MeltcurveInterpreter:
                               plot_bgcolor='#ffffff',
                               title_font_color="#417a41",
                               )
-            fig.update_xaxes(title_text=xtitle,
-                             showgrid=False)
-            fig.update_yaxes(title_text=ytitle,
-                             showgrid=False)
-            fig.layout.images = [dict(source=img,
-                                      xref="paper",
-                                      yref="paper",
-                                      x=0.1,
-                                      y=1.05,
-                                      sizex=0.20,
-                                      sizey=0.20,
-                                      xanchor="center",
-                                      yanchor="bottom")]
+            fig.update_xaxes(title_text =xtitle,
+                             showgrid = False)
+            fig.update_yaxes(title_text =ytitle,
+                             showgrid= False)
+
         if save:
             return fig
         fig.show()
@@ -194,23 +180,26 @@ class MeltcurveInterpreter:
         path = input("Enter the path to save: ")
         return path
 
-    def data_read(self, path, labels=False, index=False, figure=False):
+    def data_read(self, data=None, path=None, labels=False, index=False, figure=False):
         self.path = path
         from tqdm import tqdm
         for j in tqdm(range(10), desc=f'Loading data', leave=False):
             time.sleep(0.1)
-        try:
+        if path is not None:
             try:
-                return_data = pd.read_excel(path, engine='xlrd')
+                try:
+                    return_data = pd.read_excel(path, engine='xlrd')
+                except:
+                    return_data = pd.read_excel(path)
             except:
-                return_data = pd.read_excel(path)
-        except:
-            raise ValueError("Unsupported Format!")
+                raise ValueError("Unsupported Format!")
+        else:
+            return_data = data
 
         if index:
-            return_data.drop(return_data.columns[0], axis=1, inplace=True)
+            return_data.drop(return_data.columns[0], axis =1, inplace= True)
 
-        if len(return_data.columns) > 3:
+        if len(return_data.columns)>3:
             if not all([return_data.columns[0] == 'Text', return_data.columns[1] == 'X', return_data.columns[2] == 'Y',
                         return_data.columns[3] == 'Text.1']):
                 raise ValueError("""Could not Load:
@@ -218,8 +207,7 @@ class MeltcurveInterpreter:
                                         If your input file has index, please assign "index=True".
                                     2.Or Invalid File""")
         elif len(return_data.columns) == 3:
-            if not all(
-                    [return_data.columns[0] == 'Text', return_data.columns[1] == 'X', return_data.columns[2] == 'Y']):
+            if not all([return_data.columns[0] == 'Text', return_data.columns[1] == 'X', return_data.columns[2] == 'Y']):
                 raise ValueError("""Could not Load:
                                     1. Please check your input spreadsheet format. 
                                         If your input file has index, please assign "index=True".
@@ -237,13 +225,13 @@ class MeltcurveInterpreter:
         #     li_labels.append(return_data[cols].unique()[0])
         # self.labels = li_labels
 
-        li_labels = return_data.iloc[:, 0::3].loc[1].apply(lambda x: str(x).split()[-1]).to_list()
+        li_labels = return_data.iloc[:,0::3].loc[1].apply(lambda x : str(x).split()[-1]).to_list()
         self.labels = li_labels
         try:
-            sampleid = return_data.iloc[:, 0::3].loc[1].apply(lambda x: str(x).split()[1]).to_list()
+            sampleid = return_data.iloc[:,0::3].loc[1].apply(lambda x : str(x).split()[1]).to_list()
             self.sampleid = sampleid
         except:
-            self.sampleid = ['NA' for _ in range(return_data.iloc[:, 0::3].shape[1])]
+            self.sampleid = ['NA' for _ in range(return_data.iloc[:,0::3].shape[1])]
         dummy_data = pd.concat([return_data.iloc[:, 1], return_data.iloc[:, 2::3]], axis=1)
         del return_data
         return_data = dummy_data
@@ -253,22 +241,22 @@ class MeltcurveInterpreter:
             self.plot(data=self.transformed_data)
 
         if labels:
-            return [self.transformed_data, np.array(self.labels).reshape(-1)]
+            return [self.transformed_data, np.array(self.labels).reshape(-1)]       
         else:
             return self.transformed_data
 
-    def melt_convertion(self, figure=False, return_value=False, download=False):
+    def melt_convertion(self, figure = False, return_value = False, download=False):
         data_copy = self.transformed_data.copy()
 
         for columns in data_copy.columns[1:]:
-            diff = np.gradient(data_copy[columns], data_copy.iloc[:, 0])
-            data_copy[columns] = -diff / 10
-        new_df = pd.DataFrame(columns=data_copy.columns)
-        xnew = np.linspace(data_copy.iloc[0, 0], data_copy.iloc[-1, 0], int(len(data_copy.iloc[:, 0]) * 2.945))
+            diff = np.gradient(data_copy[columns], data_copy.iloc[:,0])
+            data_copy[columns] = -diff/10
+        new_df = pd.DataFrame(columns = data_copy.columns)
+        xnew = np.linspace(data_copy.iloc[0,0], data_copy.iloc[-1,0], int(len(data_copy.iloc[:,0])*2.945))
         new_df['X'] = xnew
         for cols in data_copy[1:]:
-            splrep = scipy.interpolate.splrep(data_copy.iloc[:, 0], data_copy[cols], s=0.031)
-            new_df[cols] = scipy.interpolate.splev(xnew, splrep)
+            splrep = scipy.interpolate.splrep(data_copy.iloc[:,0], data_copy[cols], s = 0.031)
+            new_df[cols] = scipy.interpolate.splev(xnew,splrep)
         processed_data = new_df
 
         if figure:
@@ -284,7 +272,7 @@ class MeltcurveInterpreter:
         if return_value:
             return processed_data
 
-    def feature_detection(self, download=False, return_values=False):
+    def feature_detection(self,download=False, return_values = False):
         data = self.transformed_data
         c1 = ['Tm1', 'Tstart1', 'Tend1', 'Prom1', 'Width1', 'AUC1', 'Tm2', 'Tstart2', 'Tend2', 'Prom2',
               'Width2', 'AUC2', 'Target']
@@ -305,7 +293,7 @@ class MeltcurveInterpreter:
             peaks = [peaks[u] for u in desc_proms]
             proms = [proms[l] for l in desc_proms]
             peak_tempeartures = [x[peak] for peak in peaks]
-
+            
             width_data = np.array(peak_widths(y, peaks, rel_height=0.75)).T
             if len(width_data) > 0:
                 first_highest_peak_att = width_data[0]
@@ -337,7 +325,7 @@ class MeltcurveInterpreter:
 
             if prediction == 0:
                 features_data.loc[k, c1] = [0.0 for _ in range(len(c1))]
-                features_data.loc[k, 'Target'] = self.labels[k - 1]
+                features_data.loc[k, 'Target'] = self.labels[k-1]
 
             if prediction == 1:
                 if len(first_highest_peak_att) == 0:
@@ -350,36 +338,44 @@ class MeltcurveInterpreter:
                     features_data.loc[k, c1[5:]] = [0.0 for _ in range(len(c1[5:]))]
 
             if prediction == 2:
-                if len(first_highest_peak_att) == 0:
-                    features_data.loc[k, c1] = [0.0 for _ in range(len(c1))]
-
-                else:
-                    width, prominence, start, end = *first_highest_peak_att,
-                    width1, prominence1, start1, end1 = *second_highest_peak_att,
-
-                    if prominence1 < prominence * 0.20:
-                        print('Second Promince is low')
-                        start = x[round(start)]
-                        end = x[round(end)]
-                        features_data.loc[k, c1[:5]] = [peak_tempeartures[0], start, end, prominence, width]
-                        features_data.loc[k, c1[5:]] = [0.0 for _ in range(len(c1[5:]))]
+                try:
+                    if len(first_highest_peak_att) == 0:
+                        features_data.loc[k, c1] = [0.0 for _ in range(len(c1))]
 
                     else:
-                        start = x[round(start)]
-                        end = x[round(end)]
-                        start1 = x[round(start1)]
-                        end1 = x[round(end1)]
-                        try:
-                            features_data.loc[k, c1[:5]] = [peak_tempeartures[0], start, end, prominence, width]
-                            features_data.loc[k, c1[6:11]] = [peak_tempeartures[1], start1, end1, prominence1, width1]
-                            features_data.loc[k, c1[11:]] = [0.0 for _ in range(len(c1[11:]))]
-                        except:
+                        width, prominence, start, end = *first_highest_peak_att,
+                        width1, prominence1, start1, end1 = *second_highest_peak_att,
+
+                        if prominence1 < prominence * 0.40:
+                            print('Second Promince is low')
+                            start = x[round(start)]
+                            end = x[round(end)]
                             features_data.loc[k, c1[:5]] = [peak_tempeartures[0], start, end, prominence, width]
                             features_data.loc[k, c1[5:]] = [0.0 for _ in range(len(c1[5:]))]
 
+                        else:
+                            start = x[round(start)]
+                            end = x[round(end)] 
+                            start1 = x[round(start1)]
+                            end1 = x[round(end1)]
+                            try:
+                                features_data.loc[k, c1[:5]] = [peak_tempeartures[0], start, end, prominence, width]
+                                features_data.loc[k, c1[6:11]] = [peak_tempeartures[1], start1, end1, prominence1, width1]
+                                features_data.loc[k, c1[11:]] = [0.0 for _ in range(len(c1[11:]))]
+                            except:
+                                features_data.loc[k, c1[:5]] = [peak_tempeartures[0], start, end, prominence, width]
+                                features_data.loc[k, c1[5:]] = [0.0 for _ in range(len(c1[5:]))]
+                except:
+                    width, prominence, start, end = *first_highest_peak_att,
+                    start = x[round(start)]
+                    end = x[round(end)]
+                    features_data.loc[k, c1[:5]] = [peak_tempeartures[0], start, end, prominence, width]
+                    features_data.loc[k, c1[5:]] = [0.0 for _ in range(len(c1[5:]))]
+
+
             temp_range = data.iloc[:, 0]
 
-            def aidsimpson(temp_range, k, features_data, column1, column2):
+            def aidsimpson(temp_range, k, features_data,column1, column2):
                 Tstartindex = temp_range[temp_range == features_data.loc[k, column1]].index[0]
                 Tendindex = temp_range[temp_range == features_data.loc[k, column2]].index[0]
                 return [Tstartindex, Tendindex]
@@ -395,7 +391,7 @@ class MeltcurveInterpreter:
                                                                      data.iloc[indexes[0]:indexes[1], 0].to_numpy())
                 except:
                     features_data.loc[k, 'AUC' + str(ite)] = 0.0
-            features_data.loc[k, 'Target'] = self.labels[k - 1]
+            features_data.loc[k,'Target'] = self.labels[k - 1]
 
         maximum = np.sort(features_data['Prom1'].to_numpy())[-1]
         for i in range(1, features_data.shape[0] + 1):
@@ -410,44 +406,55 @@ class MeltcurveInterpreter:
                 print("Download Successful")
             except:
                 print("Download Failed")
-        self.signal_processing_data = features_data
+        self.signal_processing_data = features_data 
 
         if return_values:
             return features_data
+
 
     def report(self):
         dataa = self.signal_processing_data.copy()
         for cols in dataa.columns[:-1]:
             dataa[cols] = dataa[cols].apply(lambda x: round(x, 2))
 
-        data_len = self.transformed_data.shape[1] - 1
+        data_len = self.transformed_data.shape[1]-1
         rows = int(np.ceil(np.sqrt(data_len)))
-        cols = int(np.ceil(data_len / rows))
+        cols = int(np.ceil(data_len/rows))
 
-        # rows = int(np.ceil(data_len/3))
-        # cols = 3
 
-        # single_subplot_width = float(cols)
-        # single_subplot_height = float(rows)
-
-        # fig_width = cols * single_subplot_width
-        # fig_height = rows * single_subplot_height
         red_count = 0
         green_count = 0
         # plt.style.use('ggplot')
-        figure, axs = plt.subplots(ncols=cols, nrows=rows)
-        for i, axs in enumerate(axs.flatten()):
+        
+        try:
+            figure, axs = plt.subplots(ncols=cols, nrows=rows)
+            for i, axs in enumerate(axs.flatten()):
+                if i < data_len:
+                    if self.signal_processing_data.loc[i+1][0] == 0.0:
+                        colour = 'red'
+                        red_count+=1
+                    else:
+                        colour = 'green'
+                        green_count+=1  
+                    axs.plot(self.transformed_data.iloc[:,0],self.transformed_data.iloc[:,i+1],color = colour)
+                    axs.set_title(f'{self.labels[i]}', fontsize =10)
+                else:
+                    figure.delaxes(axs)
+        except:
+            figure, axs = plt.subplots()
+            i=0
             if i < data_len:
-                if self.signal_processing_data.loc[i + 1][0] == 0.0:
+                if self.signal_processing_data.loc[i+1][0] == 0.0:
                     colour = 'red'
-                    red_count += 1
+                    red_count+=1
                 else:
                     colour = 'green'
-                    green_count += 1
-                axs.plot(self.transformed_data.iloc[:, 0], self.transformed_data.iloc[:, i + 1], color=colour)
-                axs.set_title(f'{self.labels[i]}', fontsize=10)
+                    green_count+=1  
+                axs.plot(self.transformed_data.iloc[:,0],self.transformed_data.iloc[:,i+1],color = colour)
+                axs.set_title(f'{self.labels[i]}', fontsize =10)
             else:
                 figure.delaxes(axs)
+
         figure.tight_layout()
         canvas2 = FigureCanvas(figure)
         png_output2 = io.BytesIO()
@@ -460,12 +467,12 @@ class MeltcurveInterpreter:
         plt.close()
         plt.clf()
 
-        main_fig2, ax = plt.subplots(figsize=(10, 5))
+        main_fig2,ax  = plt.subplots(figsize = (10,5))
         for cols in self.transformed_data.columns[1:]:
-            ax.plot(self.transformed_data.iloc[:, 0], self.transformed_data[cols])
+            ax.plot(self.transformed_data.iloc[:,0], self.transformed_data[cols])
         plt.xlabel('Temperature °C')
         plt.ylabel('dF/dT')
-        plt.legend(labels=self.labels, loc='center left', bbox_to_anchor=(1, 0.5))
+        plt.legend(labels = self.labels,loc='center left', bbox_to_anchor=(1, 0.5))
         canvas4 = FigureCanvas(main_fig2)
         png_output4 = io.BytesIO()
         canvas4.print_png(png_output4)
@@ -477,15 +484,15 @@ class MeltcurveInterpreter:
         plt.close()
         plt.clf()
 
-        main_fig, ax = plt.subplots(figsize=(10, 5))
-        for cols, rows in zip(range(1, len(self.transformed_data.columns)), self.signal_processing_data.iterrows()):
+        main_fig,ax  = plt.subplots(figsize = (10,5))
+        for cols,rows in zip(range(1, len(self.transformed_data.columns)), self.signal_processing_data.iterrows()):
             if rows[1][0] == 0.0:
                 color2 = 'red'
                 label2 = 'Negative'
             else:
                 color2 = 'green'
                 label2 = 'Postive'
-            ax.plot(self.transformed_data.iloc[:, 0], self.transformed_data.iloc[:, cols], color=color2)
+            ax.plot(self.transformed_data.iloc[:,0], self.transformed_data.iloc[:,cols], color = color2)
         colors = {'negative': 'red', 'positive': 'green'}
         ax.plot([], [], color=colors['negative'], label='Negative')
         ax.plot([], [], color=colors['positive'], label='Positive')
@@ -502,6 +509,7 @@ class MeltcurveInterpreter:
             temp_image_file2 = f.name
         plt.close()
         plt.clf()
+
 
         class PDF(FPDF):
             def __init__(self):
@@ -528,10 +536,10 @@ class MeltcurveInterpreter:
         pdf.ln(5)
         pdf.set_font('Arial', '', 14)
         pdf.cell(w=0, h=15, txt="Melt signal Plot", ln=1)
-        pdf.image(temp_image_file3, x=1, y=None, w=200, h=100, type='PNG')
+        pdf.image(temp_image_file3, x=1, y= None, w = 200, h = 100, type='PNG') 
         pdf.set_font('Arial', '', 14)
         pdf.cell(w=0, h=15, txt="After Threshold", ln=1)
-        pdf.image(temp_image_file2, x=1, y=None, w=200, h=100, type='PNG')
+        pdf.image(temp_image_file2, x=1, y= None, w = 200, h = 100, type='PNG')  
         pdf.set_font('Arial', '', 14)
         pdf.cell(w=0, h=15, txt="Sample wise Melt signal Plots", ln=1)
         pdf.image(temp_image_file, x=1, y=None, w=200, h=150, type='PNG', link='')
@@ -546,9 +554,9 @@ class MeltcurveInterpreter:
         for index, row in dataa.iterrows():
             pdf.ln(8)
             if row['Tm1'] == 0.0:
-                pdf.set_text_color(r=255, g=0, b=0)
+                pdf.set_text_color(r= 255, g= 0, b = 0)
             else:
-                pdf.set_text_color(r=0, g=128, b=0)
+                pdf.set_text_color(r= 0, g= 128, b = 0) 
             pdf.cell(15, 8, str(row['Tm1']), 1)
             pdf.cell(15, 8, str(row['Tstart1']), 1)
             pdf.cell(15, 8, str(row['Tend1']), 1)
