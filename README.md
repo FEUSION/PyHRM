@@ -107,7 +107,7 @@ obj = melt.MeltcurveInterpreter()
 
 <b>PyHRM.melt.MeltcurveInterpreter.data_read(<i>data = None, path = None, labels =False, index = False, figure = False</i>)</b>
 
-The function takes either a pandas dataframe or the path of the file (.xls, .xlsx)
+The function takes either a pandas dataframe or the path of the file (.xls, .xlsx). The method could read CT, MELT and raw fluorescence data as well.
 
 <b>Parameters:</b>&emsp;<b>data : </b><i><b>pandas dataframe object</b></i>
 <br>
@@ -174,10 +174,10 @@ data = pd.read_excel('./path/file.xls', engine = 'xlrd')
 #passing the dataframe to the function
 hrmdata = obj.data_read(data = data, figure = True)
 ```
-## PyHRM.melt.MeltcurveInterpreter.plot()
+## PyHRM.melt.MeltcurveInterpreter.plot
 <b>PyHRM.melt.MeltcurveInterpreter.plot(<i>data,save = False</i>)</b>
 
-The function takes a pandas dataframe contains signal values and render back the respective figure.
+The function takes a pandas dataframe contains signal values and render back the respective figure. The plot function takes any data like CT, MELT and as well as raw fluorescence, and gives back the corresponding visulazation.
 
 <b>Parameters:</b>&emsp;<b>data : </b><i><b>pandas dataframe object</b></i>
 <br>
@@ -209,9 +209,47 @@ hrmdata = obj.data_read(path = './path/file.xls')
 fig = obj.plot(data = hrmdata, save = True)
 fig.show()
 ```
+## PyHRM.melt.MeltcurveInterpreter.melt_conversion
+<b>PyHRM.melt.MeltcurveInterpreter.plot(<i>figure = False, return_value =False, download = False</i>)</b>
 
+This methods only works for raw fluorescence data, and the input of this method is the class member itself. It converts the raw fluorescence signals into melting signals with signal smoothening. 
+<br>
+<b>NOTE : This method is the beta version of the library, the results may not be acuratae or appropriate and this is still in development</b>
 
+<b>Parameters:</b>&emsp;<b>figure : </b><i><b>bool : default False</b></i>
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Required a boolean value to render the resultant values as a plot.
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;<b>return_value : </b></b><i><b>bool : default False</b></i><br>   
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Required a boolean value to render the resultant values as a plot.
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;<b>download : </b></b><i><b>bool : default False</b></i><br> 
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Required a boolean value to save the resultant values as comma separated values.
+<br>
+<br>
+<b>Returns: &emsp;&nbsp;</b>&emsp;<b>melt signal co-ordinates: </b><i><b>pandas.core.frame.DataFrame</b></i>
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Returns an dataframe, contains melting signal co-ordinates.
 
+<br>
+
+### Example
+```
+from PyHRM import melt
+obj = melt.MeltcurveInterpreter()
+
+#reading the raw fluorescence data
+rfdata = obj.data_read(path = './path/file.xls')
+
+meltdata = obj.melt_conversion(return_value = True, figure = True, download = True)
+```
+    
+    
 # Getting Help
 
 If you need to get in touch with the team, please contact through email address: [feusion.ai@gmail.com](mailto:feusion.ai@gmail.com?subject=Extractor%20Application)
