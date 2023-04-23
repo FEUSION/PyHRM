@@ -55,7 +55,7 @@ pip3 install PyHRM
     <td nowrap><strong>Development Status</strong></td><td href = "https://pypi.org/search/?c=Development+Status+%3A%3A+5+-+Production%2FStable"><i >5 - Production/Stable </i></td>
   </tr>
   <tr>
-    <td nowrap><strong>Intened Audience</strong></td><td><i>Education</i></td>
+    <td nowrap><strong>Intened Audience</strong></td><td><i>Healthcare</i></td>
   </tr>
   <tr>
     <td nowrap><strong>License</strong></td><td><i>OSI Approved :: MIT License </i></td>
