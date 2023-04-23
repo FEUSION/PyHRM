@@ -161,7 +161,7 @@ obj = melt.MeltcurveInterpreter()
 #reading the HRM data
 hrmdata = obj.data_read(path = './path/file.xls', figure = True)
 ```
-ALternatively,
+Alternatively,
 ```
 import pandas as pd
 import openpyxl
@@ -251,7 +251,7 @@ meltdata = obj.melt_conversion(return_value = True, figure = True, download = Tr
 ## PyHRM.melt.MeltcurveInterpreter.feature_detection
 <b>PyHRM.melt.MeltcurveInterpreter.plot(<i>return_values =False, download = False</i>)</b>
 
-This methods performs feature extraction process on melting signals data, that extracts features like <i>'Tm','Tstart','Tend','Prominence','Area under the curve'</i>. This also performs noise elimination using a trained CNN model embedded in the package. The input of the method is the class member itself.
+This methods performs feature extraction process on melting signal data, that extracts features like <i>'Tm','Tstart','Tend','Prominence','Area under the curve'</i>. This also performs noise elimination using a trained CNN model embedded in the package. The input of the method is the class member itself.
 <br>
 
 <b>Parameters:</b>&emsp;<b>return_values : </b><i><b>bool : default False</b></i>
