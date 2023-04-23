@@ -1,36 +1,35 @@
-![y-removebg-preview](https://user-images.githubusercontent.com/80576855/233845390-87e32c95-b170-44b3-b1fb-82baaadea8e6.png)
+![pyHRM](https://user-images.githubusercontent.com/80576855/233845390-87e32c95-b170-44b3-b1fb-82baaadea8e6.png)
 
 <div align="center">
     <br>
-        <a href="" width="250px" height="250px" alt="Software_E-logo"></a>
+        <a href="" width="250px" height="250px" alt="pyHRM"></a>
       <br>
     <h1>PyHRM</h1>
     <h2><b>A library for processing DNA Melting signal with feature extraction and thresholding.</b></h2>
         <h4>
-        <a href="#system-requirements">Requirements</a>
-        •
-        <a href="#getting-started">Getting Started</a>
+        <a href="#installing-with-pip">Installation</a>
         •
         <a href="#features">Features</a>
         •
-        <a href="#demo">Demo</a>
+        <a href="#documentation">Documentation</a>
+        •
+        <a href="#getting-help">Help</a>
     </h4>
     <h3>
+        <img alt="PyPI" src="https://img.shields.io/pypi/v/pyhrm?color=blue"> 
+        <a href="https://github.com/FEUSION/pyHRM/releases/latest">
+            <img src="https://img.shields.io/badge/released-April%202023-teal" alt="Release">
+        </a>                                                                                     
+        <a href="https://www.python.org/downloads/">
+            <img src="https://img.shields.io/badge/python-3.10 | 3.11-blue" alt="python">
+      </a>
+      <a href="https://github.com/FEUSION/pyHRM/commits/main">
+      <img src="https://img.shields.io/github/last-commit/FEUSION/pyHRM?color=blueviolet&label=updated">
+      </a>
+      <img src="https://static.pepy.tech/personalized-badge/pyhrm?period=month&units=international_system&left_color=black&right_color=orange&left_text=PyPI%20total%20downloads%20" alt="pypi downloads">
         <a href="#meet-the-team">
             <img src="https://img.shields.io/badge/maintainers-The Team-cyan" alt="Maintainers">
         </a>
-        <a href="https://github.com/FEUSION/Extractor/releases/latest/tags/v0.0.1">
-            <img src="https://img.shields.io/badge/launched-April%202023-teal" alt="Release">
-        </a>
-        <a href="https://github.com/FEUSION/Extractor/releases/latest">
-        <img src="https://img.shields.io/github/release/MLRS-dev/Extractor?color=brightgreen&label=version" alt="Version">
-        </a>
-        <a href="https://www.microsoft.com/en-in/software-download/">
-        <img src="https://img.shields.io/badge/platform-Windows-blue" alt="Operating system">
-      </a>
-      <a href="https://github.com/FEUSION/Extractor/commits/main">
-      <img src="https://img.shields.io/github/last-commit/FEUSION/Extractor?color=blueviolet&label=updated">
-      </a>
     </h3>
 </div>
 
@@ -313,12 +312,12 @@ If you need to get in touch with the team, please contact through email address:
 # Meet the Team
 
    The developers in this project are post graduate students in the [Department of Computer Applications](https://b-u.ac.in/23/department-computer-applications) @ [Bharathiar University](https://b-u.ac.in/)
-<table style="width:25%">
+<table style="width:30%">
   <tbody>
     <tr>
-      <td align="center" valign="top"><a href="https://github.com/rajag0pal"><img src="https://avatars.githubusercontent.com/u/80576855?v=4" width="50px;" alt="Rajagopal S"/><br /><sub><b><a href="https://www.linkedin.com/in/rajagopal-s/">Rajagopal S</a></b></sub></a><br /></td>
-      <td align="center" valign="top"><a href="https://github.com/VIGNESH-R-06"><img src="https://avatars.githubusercontent.com/u/94525493?v=4" width="50px;" alt="Vignesh R"/><br /><sub><b><a href="https://www.linkedin.com/in/vignesh-r-31b5601b8/">Vignesh R</a></b></sub></a><br /></td>
-      <td align="center" valign="top"><a href="https://github.com/IamSenthilKumar"><img src="https://avatars.githubusercontent.com/u/89689985?v=4" width="50px;" alt="Senthil Kumar N"/><br /><sub><b><a href="https://www.linkedin.com/in/senthilkumar-n/">N.S.K</a></b></sub></a><br /></td>
+      <td align="center" valign="top" width="15%"><a href="https://github.com/rajag0pal"><img src="https://avatars.githubusercontent.com/u/80576855?v=4" width="50px;" alt="Rajagopal Shanmugam"/><br /><sub><b><a href="https://www.linkedin.com/in/rajagopal-s/">Rajagopal S</a></b></sub></a><br /></td>
+      <td align="center" valign="top" width="15%"><a href="https://github.com/VIGNESH-R-06"><img src="https://avatars.githubusercontent.com/u/94525493?v=4" width="50px;" alt="Vignesh Ravi"/><br /><sub><b><a href="https://www.linkedin.com/in/vignesh-r-31b5601b8/">Vignesh R</a></b></sub></a><br /></td>
+      <td align="center" valign="top" width="15%"><a href="https://github.com/IamSenthilKumar"><img src="https://avatars.githubusercontent.com/u/89689985?v=4" width="50px;" alt="Senthil Kumar Nallendran"/><br /><sub><b><a href="https://www.linkedin.com/in/senthilkumar-n/">Senthil Kumar N</a></b></sub></a><br /></td>
     </tr>
   </tbody>
 </table>
