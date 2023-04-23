@@ -1,5 +1,5 @@
-########################################################################################################################
 ##Importing Libraries
+
 import time
 import site
 from datetime import datetime
@@ -8,118 +8,54 @@ import subprocess
 import warnings
 import os
 warnings.filterwarnings('ignore')
-try:
-    import io
-except:
-    subprocess.check_call([sys.executable,'-m', 'pip', 'install', 'io', '-q'])
-    import io
-try:
-    import tqdm
-except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tqdm','-q'])
-    import tqdm
+import io
+import tqdm
 from tqdm import tqdm
 for j in tqdm(range(10), desc=f'Setting Up..', leave=False):
     time.sleep(0.2)
-subprocess.check_call([sys.executable,'-m', 'pip', 'install', '--upgrade', 'pip','-q'])
-try:
-    import packaging
-except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'packaging','-q'])
-try:
-    import pandas as pd
-except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install','pandas','-q'])
-    import pandas as pd
-try:
-    import PIL
-    from PIL import Image
-    import requests
-except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install','pillow','-q'])
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'requests','-q'])
-    import PIL
-    from PIL import Image
-    import requests
-try:
-    import numpy as np
-except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install','numpy','-q'])
-    import numpy as np
-try:
-    import kaleido
-except:
-    subprocess.check_call([sys.executable,'-m','pip','install','-U','kaleido','-q'])
-    import kaleido
-try:
-    import xlrd
-except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'xlrd','-q'])
-    import xlrd
-try:
-    import plotly
-except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'plotly','-q'])
+import packaging
+import pandas as pd
+import PIL
+from PIL import Image
+import requests
+import numpy as np
+import kaleido
+import xlrd
+import plotly
 for j in tqdm(range(10), desc=f'Initializing Necessary Libraries..', leave=False):
     time.sleep(0.2)
-try:
-    import openpyxl
-except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'openpyxl','-q'])
-    import openpyxl
-try:
-    import scipy
-    from scipy.signal import find_peaks, peak_widths, peak_prominences
-    from scipy.integrate import simpson
-except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'scipy','-q'])
-    import scipy
-    from scipy.signal import find_peaks, peak_widths, peak_prominences
-    from scipy.integrate import simpson
-try:
-    import tensorflow
-    import keras
-    from keras.models import load_model
-except:
-    print("Keras is a required component of this package \n Installing Keras..\n This a may take a while..")
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-U','tensorflow==2.12.0rc0'])
-    subprocess.check_call([sys.executable, '-m','pip', 'install','-U','keras'])
-    import tensorflow
-    import keras
-    from keras.models import load_model
-try:
-    import matplotlib.pyplot as plt
-    from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-except:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'matplotlib','-q'])
-    import matplotlib.pyplot as plt
-    from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-try:
-    from fpdf import FPDF
-    import tempfile
-except:
-    subprocess.check_call([sys.executable, '-m','pip','install', 'FPDF','-q'])
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tempfile', '-q'])
-    from fpdf import FPDF
-    import tempfile
+import openpyxl
+import scipy
+from scipy.signal import find_peaks, peak_widths, peak_prominences
+from scipy.integrate import simpson
+import tensorflow #tensorflow==2.12.0rc0
+import keras
+from keras.models import load_model
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from fpdf import FPDF
+import tempfile
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = 'browser'
 for j in tqdm(range(5), desc=f'Setup Complete', leave=False):
     time.sleep(0.2)
-########################################################################################################################
+
 
 
 class MeltcurveInterpreter:
 
     def __init__(self):
-        cwd = os.getcwd()
-        actuall_path = site.getsitepackages()[1]
-        if 'MeltcurveAnalysis' in cwd:
-            model_path = os.path.join(cwd,'Melt_2.0.h5')
-        else:
-            model_path = os.path.join(actuall_path,'MeltcurveAnalysis','Melt2_0.h5')
+        # cwd = os.getcwd()
+        # actuall_path = site.getsitepackages()[1]
+        # if 'MeltcurveAnalysis' in cwd:
+        #     model_path = os.path.join(cwd,'Melt_2.0.h5')
+        # else:
+        #     model_path = os.path.join(actuall_path,'MeltcurveAnalysis','Melt2_0.h5')
+        dir_path = os.path.dirname(os.path.abspath(__file__))
+        model_path = os.path.join(dir_path,'Melt2_0.h5')
+
         self.labels = []
         self.transformed_data = pd.DataFrame()
         self.model = load_model(model_path, compile=False)
@@ -532,7 +468,6 @@ class MeltcurveInterpreter:
         pdf.cell(w=30, h=5, txt="Date: ", ln=0)
         pdf.cell(w=30, h=5, txt=str(datetime.now().strftime("%d/%m/%Y")), ln=1)
         pdf.cell(w=30, h=5, txt="File: ", ln=0)
-        pdf.cell(w=30, h=5, txt=str(self.path.split('\\')[-1]), ln=1)
         pdf.ln(5)
         pdf.set_font('Arial', '', 14)
         pdf.cell(w=0, h=15, txt="Melt signal Plot", ln=1)
