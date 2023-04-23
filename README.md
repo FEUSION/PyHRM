@@ -214,7 +214,7 @@ fig.show()
 ```
 ## PyHRM.melt.MeltcurveInterpreter.melt_conversion
 ```
-PyHRM.melt.MeltcurveInterpreter.plot(figure = False, return_value =False, download = False)
+PyHRM.melt.MeltcurveInterpreter.melt_conversion(figure = False, return_value =False, download = False)
 ```
 This methods only works for raw fluorescence data, and the input of this method is the class member itself. It converts the raw fluorescence signals into melting signals with signal smoothening. 
 <br>
@@ -254,7 +254,7 @@ meltdata = obj.melt_conversion(return_value = True, figure = True, download = Tr
 ```
 ## PyHRM.melt.MeltcurveInterpreter.feature_detection
 ```
-PyHRM.melt.MeltcurveInterpreter.plot(return_values =False, download = False)
+PyHRM.melt.MeltcurveInterpreter.feature_detection(return_values =False, download = False)
 ```
 This methods performs feature extraction process on melting signal data, that extracts features like <i>'Tm','Tstart','Tend','Prominence','Area under the curve'</i>. This also performs noise elimination using a trained CNN model embedded in the package. The input of the method is the class member itself.
 <br>
