@@ -49,7 +49,6 @@ pip3 install PyHRM
 
 ## Classifiers
 
-The following are the essential requirements for this software to run:
 
 <table>
   <tr>
