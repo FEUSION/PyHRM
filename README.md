@@ -223,7 +223,7 @@ This methods only works for raw fluorescence data, and the input of this method 
 <br>
 <br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;<b>return_value : </b></b><i><b>bool : default False</b></i><br>   
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Required a boolean value to render the resultant values as a plot.
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Required a boolean value to return the result as dataframe.
 <br>
 <br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;<b>download : </b></b><i><b>bool : default False</b></i><br> 
@@ -234,7 +234,7 @@ This methods only works for raw fluorescence data, and the input of this method 
 <b>Returns: &emsp;&nbsp;</b>&emsp;<b>melt signal co-ordinates: </b><i><b>pandas.core.frame.DataFrame</b></i>
 <br>
 <br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Returns an dataframe, contains melting signal co-ordinates.
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Returns a dataframe, contains melting signal co-ordinates.
 
 <br>
 
@@ -248,7 +248,39 @@ rfdata = obj.data_read(path = './path/file.xls')
 
 meltdata = obj.melt_conversion(return_value = True, figure = True, download = True)
 ```
-    
+## PyHRM.melt.MeltcurveInterpreter.feature_detection
+<b>PyHRM.melt.MeltcurveInterpreter.plot(<i>return_values =False, download = False</i>)</b>
+
+This methods performs feature extraction process on melting signals data, that extracts features like <i>'Tm','Tstart','Tend','Prominence','Area under the curve'</i>. This also performs noise elimination using a trained CNN model embedded in the package. The input of the method is the class member itself.
+<br>
+
+<b>Parameters:</b>&emsp;<b>return_values : </b><i><b>bool : default False</b></i>
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Required a boolean value to return the result as dataframe.
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;<b>download : </b></b><i><b>bool : default False</b></i><br> 
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Required a boolean value to save the resultant values as comma separated values.
+<br>
+<br>
+<b>Returns: &emsp;&nbsp;</b>&emsp;<b>Features of the signal: </b><i><b>pandas.core.frame.DataFrame</b></i>
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Returns a dataframe, contains features of melting signals
+<br>
+
+### Example
+```
+from PyHRM import melt
+obj = melt.MeltcurveInterpreter()
+
+#reading the HRM data
+hrmdata = obj.data_read(path = './path/file.xls')
+
+features = obj.feature_detection(return_values = True)
+```
     
 # Getting Help
 
