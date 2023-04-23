@@ -61,11 +61,11 @@
 
 <br />
 
-# What is PyHRM?
-[PyHRM]([https://github.com/FEUSION/Extractor](https://feusion.github.io/PyHRM/)) is a python based library for processing HRM data, especially, DNA melting signals to extact features like 'Melting Temperatures', 'Take-off and Touch-down points of melting signal (Temperature at which peak start rising and temperature at which peak falls down)','Peak prominences',and 'Area Under the curve'. Additionally, the library offers vision based filtering, to eliminate noisy signals from the data and provides only genuine peaks with all the above mentioned features.
+## What is PyHRM?
+[PyHRM]([https://github.com/FEUSION/Extractor](https://feusion.github.io/PyHRM/)) is a python based library for processing High Resolution Melting (HRM) data, especially, DNA melting signals to extact features like 'Melting Temperatures', 'Take-off and Touch-down points of melting signal (Temperature at which peak start rising and temperature at which peak falls down)','Peak prominences',and 'Area Under the curve'. Additionally, the library offers interactive visualization for DNA melting singal and vision based filtering, to eliminate noisy signals from the data and provides only genuine peaks with all the above mentioned features.
 
 
-# Installing with PIP
+## Installing with PIP
 
 ```
 python -m pip install PyHRM
@@ -75,64 +75,61 @@ or
 pip3 install PyHRM
 ```
 
-# System Requirements
+## Classifiers
 
 The following are the essential requirements for this software to run:
 
 <table>
   <tr>
-    <td nowrap><strong>Development Status</strong></td><td href = "https://pypi.org/search/?c=Development+Status+%3A%3A+5+-+Production%2FStable"><i ><b >5 - Production/Stable </b></i></td>
+    <td nowrap><strong>Development Status</strong></td><td href = "https://pypi.org/search/?c=Development+Status+%3A%3A+5+-+Production%2FStable"><i >5 - Production/Stable </i></td>
   </tr>
   <tr>
-    <td nowrap><strong>Platforms</strong></td><td><i>Windows</i></td>
+    <td nowrap><strong>Intened Audience</strong></td><td><i>Education</i></td>
+  </tr>
+  <tr>
+    <td nowrap><strong>License</strong></td><td><i>OSI Approved :: MIT License </i></td>
+  </tr>
+  <tr>
+    <td nowrap><strong>Operating System</strong></td><td><i>Microsoft :: Windows :: Windows 10 </i></td>
+  </tr>
+  <tr>
+    <td nowrap><strong>Programming Language</strong></td><td><i>Python 3</i></td>
   </tr>
 </table>
 
-# Features
-- Able to set user credentials.
-- Selection of which type of data to extract from the raw data, i.e.,
-    - CT (Amplification Curve)
-    - MELT (derivative) &
-    - HRM (Normalized fluorescence)
-- Supports desired output format as excel file.
+## Features
+- Rapid preprocessing.
+- Feature Extraction
+    - Tm (Melting Temperature (Max 2))
+    - Tstart (Starting temperature point)
+    - Tend (Ending Temperature)
+    - Prominence
+    - Area Under the curve
+- Interactive Visulization.
+- Computer Vision based thresholding for eliminating noisy signals.
+- Report Generation.
 
-# Getting Started
+## Input Data format
 
-It is easy to get started, you can download the executable zip file [here](https://github.com/FEUSION/Extractor/releases/latest/download/EXTRACTOR-v1.0.0.zip)
-
-# Setup
-
-1. Go to the unzipped application folder.
-
-![folder](https://user-images.githubusercontent.com/126145859/228214338-2dbcedb7-74bd-43ac-acf2-57e372cc806e.jpg)
-
-
-2. Find the executable file and run it.
-
-![app](https://user-images.githubusercontent.com/126145859/229074435-de70dc29-2d13-4245-932b-cacd9ad72cf3.jpg)
+<p align="center">
+<b>Format</b><br />
+    The input format should be as followed below. 'Text','X','Y'.... 
+</p>
 
 
-3. After the successful installation, register with new user credentials
+![dataformat](https://user-images.githubusercontent.com/80576855/233830128-279608f2-42f4-4bca-84b1-1063922956db.png)
 
-> **Note**:
-> - An user can able to set only two new user credentials.
-> - Username is  case-sensitive.
+The current release only support .xls and .xlsx formats. Further updates on multiple file supports will be released in the upcoming versions.
 
-![signup_user](https://user-images.githubusercontent.com/126145859/229084487-5184df34-ccce-4e87-9cae-9ab78d4c62d7.png)
+## Setup
 
-
-## Type of data to extract
-
-Select the type of data from the drop-down menu and enter the respected fields below and finally enter submit.
-
-![types](https://user-images.githubusercontent.com/126145859/229084427-a837e98a-fbc9-451c-9ff7-51c30f41b3df.png)
-
-Let the Extractor do it.
+```
+from PyHRM import melt
+obj = melt.MeltcurveInterpreter()
+```
 
 
-# Demo
 
-To see the detailed demo of this application, click [here](https://youtu.be/4sDumV86qFI)
 
 # Getting Help
 
