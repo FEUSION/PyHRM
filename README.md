@@ -33,35 +33,7 @@
     </h3>
 </div>
 
-
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>📌 Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#why-extractor">Why EXTRACTOR?</a>
-    </li>
-    <li>
-    <a href="#what-is-extractor">What is EXTRACTOR?</a>
-    </li>
-    <li><a href="#system-requirements">System Requirements</a></li>
-    <li><a href="#features">Features</a></li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#setup">Setup</a></li>
-      </ul>
-    </li>
-    <li><a href="#demo">Demo</a></li>
-    <li><a href="#getting-help">Getting Help</a></li>
-    <li><a href="#meet-the-team">Meet the Team</a></li>
-  </ol>
-</details>
-
-<br />
-
-## What is PyHRM?
+# PyHRM
 [PyHRM]([https://github.com/FEUSION/Extractor](https://feusion.github.io/PyHRM/)) is a python based library for processing High Resolution Melting (HRM) data, especially, DNA melting signals to extact features like 'Melting Temperatures', 'Take-off and Touch-down points of melting signal (Temperature at which peak start rising and temperature at which peak falls down)','Peak prominences',and 'Area Under the curve'. Additionally, the library offers interactive visualization for DNA melting singal and vision based filtering, to eliminate noisy signals from the data and provides only genuine peaks with all the above mentioned features.
 
 
@@ -121,12 +93,64 @@ The following are the essential requirements for this software to run:
 
 The current release only support .xls and .xlsx formats. Further updates on multiple file supports will be released in the upcoming versions.
 
-## Setup
+# Documentation
 
+## Import
 ```
 from PyHRM import melt
+```
+## Creating the class Instance
+```
 obj = melt.MeltcurveInterpreter()
 ```
+## PyHRM.melt.MeltcurveInterpreter.data_read()
+
+<b>PyHRM.melt.MeltcurveInterpreter.data_read(<i>data = None, path = None, labels =False, index = False, figure = False</i>)</b>
+
+The function takes either a pandas dataframe or the path of the file (.xls, .xlsx)
+
+<b>Parameters:</b>&emsp;<b>data : </b><i><b>pandas dataframe object</b></i>
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;A pandas dataframe with the specified input format of HRM data extracted from machines.
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;<b>path : </b></b><i><b>path of the file (.xls or .xlsx)</b></i><br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;A path of the HRM data file extracted from machines.
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;<b>labels : </b></b><i><b>bool : default False</b></i><br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Returns a list containing dataframe and label of the samples given in the 'Text' attribute based on a boolean value.
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;<b>index : </b></b><i><b>bool : default False</b></i><br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Required a boolean value to remove the index (if the HRM data has.)
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;<b>figure : </b></b><i><b>bool : default False</b></i><br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Required a boolean value to render a interactive plot in the browser.
+<br>
+<br>
+<b>Returns: &emsp;&nbsp;</b>&emsp;<b>x, y cordinates : </b><i><b>pandas.core.frame.DataFrame</b></i>
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;A pandas dataframe with the temperature co-ordinates as 'X' and the signal co-ordinates as 'Y','Y.1'..'Y.n'
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;<b>x,y cordinates and labels : </b></b><i><b>list</b></i><br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;If <i>lables</i> is True, returns a list containing a dataframe and lables
+<br>
+<br>
+<b>Warns: &emsp;&nbsp;</b>&emsp;<b>ValueError</b>
+
+
+
+
 
 
 
