@@ -54,7 +54,7 @@ class MeltcurveInterpreter:
         # else:
         #     model_path = os.path.join(actuall_path,'MeltcurveAnalysis','Melt2_0.h5')
         dir_path = os.path.dirname(os.path.abspath(__file__))
-        model_path = os.path.join(dir_path,'Melt2_0.h5')
+        model_path = os.path.join(dir_path,'tar.h5')
 
         self.labels = []
         self.transformed_data = pd.DataFrame()
