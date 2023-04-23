@@ -218,7 +218,8 @@ PyHRM.melt.MeltcurveInterpreter.melt_conversion(figure = False, return_value =Fa
 ```
 This methods only works for raw fluorescence data, and the input of this method is the class member itself. It converts the raw fluorescence signals into melting signals with signal smoothening. 
 <br>
-<b>NOTE : This method is the beta version of the library, the results may not be acuratae or appropriate and this is still in development</b>
+| NOTE : This method is the beta version of the library, the results may not be acuratae or appropriate and this is still in development|
+| --- |
 
 <b>Parameters:</b>&emsp;<b>figure : </b><i><b>bool : default False</b></i>
 <br>
