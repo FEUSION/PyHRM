@@ -278,6 +278,7 @@ obj = melt.MeltcurveInterpreter()
 #reading the HRM data
 hrmdata = obj.data_read(path = './path/file.xls')
 
+#Extracting features of the melt signals
 features = obj.feature_detection(return_values = True)
 ```
 <br>
@@ -288,6 +289,21 @@ features = obj.feature_detection(return_values = True)
 The method generates a report with the feature extracting data and it's corresponding melting signal figures.
 
 <b>Parameters:</b>&emsp;<b>None</b>
+<br>
+### Example
+```
+from PyHRM import melt
+obj = melt.MeltcurveInterpreter()
+
+#reading the HRM data
+hrmdata = obj.data_read(path = './path/file.xls')
+
+#Extracting features of the melt signals
+features = obj.feature_detection(return_values = True)
+
+#Generating the report
+obj.report()
+```
 
 # Getting Help
 
