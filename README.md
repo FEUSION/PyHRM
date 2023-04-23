@@ -147,13 +147,32 @@ The function takes either a pandas dataframe or the path of the file (.xls, .xls
 <br>
 <br>
 <b>Warns: &emsp;&nbsp;</b>&emsp;<b>ValueError</b>
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Raised when unsupported data format passed.
 
+<br>
 
+## PyHRM.melt.MeltcurveInterpreter.plot()
+<b>PyHRM.melt.MeltcurveInterpreter.plot(<i>data,save = False</i>)</b>
 
+The function takes a pandas dataframe contains signal values and render back the respective figure.
 
-
-
-
+<b>Parameters:</b>&emsp;<b>data : </b><i><b>pandas dataframe object</b></i>
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;A pandas dataframe contains signal values.
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;<b>save : </b></b><i><b>bool : default False</b></i><br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Required a boolean value to save the plot in a figure object.
+<br>
+<br>
+<b>Returns: &emsp;&nbsp;</b>&emsp;<b>figure: </b><i><b>plotly.graph_objs._figure.Figure</b></i>
+<br>
+<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Returns an interactive plotly figure object.
 
 # Getting Help
 
