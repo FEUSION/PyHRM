@@ -3,7 +3,7 @@
         <a href="" width="250px" height="250px" alt="Software_E-logo"></a>
       <br>
     <h1>PyHRM</h1>
-    <h2><b>A simple automatic GUI-based data extraction tool for Q-Rex Software</b></h2>
+    <h2><b>A novel library for processing DNA Melting signal with feature extraction and thresholding.</b></h2>
         <h4>
         <a href="#system-requirements">Requirements</a>
         •
