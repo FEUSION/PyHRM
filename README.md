@@ -104,7 +104,9 @@ obj = melt.MeltcurveInterpreter()
 ```
 ## PyHRM.melt.MeltcurveInterpreter.data_read
 
-<b>PyHRM.melt.MeltcurveInterpreter.data_read(<i>data = None, path = None, labels =False, index = False, figure = False</i>)</b>
+```
+PyHRM.melt.MeltcurveInterpreter.data_read(<i>data = None, path = None, labels =False, index = False, figure = False</i>)
+```
 
 The function takes either a pandas dataframe or the path of the file (.xls, .xlsx). The method could read CT, MELT and raw fluorescence data as well.
 
