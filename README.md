@@ -4,7 +4,7 @@
         <a href="" width="250px" height="250px" alt="Software_E-logo"></a>
       <br>
     <h1>PyHRM</h1>
-    <h2><b>A novel library for processing DNA Melting signal with feature extraction and thresholding.</b></h2>
+    <h2><b>A library for processing DNA Melting signal with feature extraction and thresholding.</b></h2>
         <h4>
         <a href="#system-requirements">Requirements</a>
         •
@@ -18,7 +18,7 @@
         <a href="#meet-the-team">
             <img src="https://img.shields.io/badge/maintainers-The Team-cyan" alt="Maintainers">
         </a>
-        <a href="https://github.com/FEUSION/Extractor/releases/latest/tags/v1.0.0">
+        <a href="https://github.com/FEUSION/Extractor/releases/latest/tags/v0.0.1">
             <img src="https://img.shields.io/badge/launched-April%202023-teal" alt="Release">
         </a>
         <a href="https://github.com/FEUSION/Extractor/releases/latest">
@@ -33,7 +33,7 @@
     </h3>
 </div>
 
-[EXTRACTOR](https://github.com/FEUSION/Extractor) is an application that has been developed to assist _Rotor-Gene_ PCR cycler users to extract raw data ".rex" files from **_Rotor-Gene Q-Rex Software Series_**
+
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -61,31 +61,19 @@
 
 <br />
 
-# Why EXTRACTOR?
+# What is PyHRM?
+[PyHRM]([https://github.com/FEUSION/Extractor](https://feusion.github.io/PyHRM/)) is a python based library for processing HRM data, especially, DNA melting signals to extact features like 'Melting Temperatures', 'Take-off and Touch-down points of melting signal (Temperature at which peak start rising and temperature at which peak falls down)','Peak prominences',and 'Area Under the curve'. Additionally, the library offers vision based filtering, to eliminate noisy signals from the data and provides only genuine peaks with all the above mentioned features.
 
-EXTRACTOR is an artifact from our Main project, (currently, we are working on at **[Microbiological Laboratory Research and Services, Coimbatore](https://microserv.in/)** in association with **[Microbiological Laboratory, Coimbatore](https://microlabindia.com/)**) so we opted to make an application that automatically extracts the **High Resolution Melt (HRM)** raw data (**'.rex'** files) produced by **[Qiagen's](https://www.qiagen.com/us)** _[Rotor-Gene Q](https://www.qiagen.com/us/products/discovery-and-translational-research/epigenetics/dna-methylation/methylation-specific-pcr/rotor-gene-q)_ PCR cyclers to the necessary '.xls' files from the **[Qiagen's Q-Rex Software](https://www.qiagen.com/us/applications/pcr/thermal-cyclers/q-rex-software)** and its solely for the _analytical_ purpose only.
 
-It's very useful for the laboratories, those who run plentiful PCR experiments and have past run files, and want to export those raw data into desired excel format (.xls files) for their internal analytics team to work with that data.
+# Installing with PIP
 
-# What is EXTRACTOR?
-
-EXTRACTOR is a lightweight simple GUI-based application that extracts **'.rex'** files from the **Qiagen's Rotor-Gene Q Software** to the necessary **'.xls'** file. It's built for the users such as laboratory technicians and clinicians who handle and run PCR experiments especially in **Qiagen's Rotor-Gene Q** thermal cycler machine.
-
-After the successful experiment ran in _Rotor-Gene Q_ cycler, it produces the raw data and the users which can be only opened and analyzed via **Qiagen's Q-Rex Software**. If a specific run file (raw data) has to be exported into desired formats such as _text_(.txt), _HTML Table_(.html), _XML_(.xml), _excel_(.xls) given by the **Qiagen Rotor-Gene Q-Rex Software**. Here we automated the user role by our **EXTRACTOR** Software, by which you simply put the raw data file directory and desired directory to which the excel files are stored in your system, which saves time and not to burned out from this repititive task.
-
-<p align="center">
-<b>Manual Conversion</b><br />
-    Time consuming and often introduce frustation and inconsistency, while converting bulks of raw data by manual process.
-</p>
-
-![Manual Conversion](https://user-images.githubusercontent.com/126145859/227910822-4ef20c41-3f6b-49d7-9dce-ff611d909419.png)
-
-<p align="center">
-<b>Automatic Conversion</b><br />
-    Runs in a constant time and it handle countless of raw data automatically without any human intervence.
-</p>
-
-![Automatic Conversion](https://user-images.githubusercontent.com/126145859/227910859-43c36212-5e51-4061-8e71-cf66ab2951d9.png)
+```
+python -m pip install PyHRM
+```
+or
+```
+pip3 install PyHRM
+```
 
 # System Requirements
 
@@ -93,7 +81,7 @@ The following are the essential requirements for this software to run:
 
 <table>
   <tr>
-    <td nowrap><strong>Q-Rex Software</strong></td><td><i><b>Rotor-Gene Q Software v2.3.5 (Build 1)</b></i></td>
+    <td nowrap><strong>Development Status</strong></td><td href = "https://pypi.org/search/?c=Development+Status+%3A%3A+5+-+Production%2FStable"><i ><b >5 - Production/Stable </b></i></td>
   </tr>
   <tr>
     <td nowrap><strong>Platforms</strong></td><td><i>Windows</i></td>
