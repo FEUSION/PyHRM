@@ -1,3 +1,5 @@
+![y](https://user-images.githubusercontent.com/80576855/233824868-99358619-cc04-415c-9f55-94d105fa8d3d.png)
+
 <div align="center">
     <br>
         <a href="" width="250px" height="250px" alt="Software_E-logo"></a>
@@ -33,11 +35,6 @@
 </div>
 
 [EXTRACTOR](https://github.com/FEUSION/Extractor) is an application that has been developed to assist _Rotor-Gene_ PCR cycler users to extract raw data ".rex" files from **_Rotor-Gene Q-Rex Software Series_**
-
-![y](https://user-images.githubusercontent.com/80576855/233824670-6e7935db-0291-498b-b18a-809063a80acb.png)
-
-
-
 
 <!-- TABLE OF CONTENTS -->
 <details>
