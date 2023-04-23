@@ -1,0 +1,4 @@
+include src/pyHRM/*.txt
+include src/pHRM/*.py
+include src/pHRM/*.h5
+include src/pHRM/*.md
