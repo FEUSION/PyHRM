@@ -38,7 +38,7 @@ import tempfile
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
-pio.renderers.default = 'notebook_connected'
+pio.renderers.default = 'browser+notebook'
 for j in tqdm(range(5), desc=f'Setup Complete', leave=False):
     time.sleep(0.2)
 
