@@ -103,7 +103,7 @@ from PyHRM import melt
 ```
 obj = melt.MeltcurveInterpreter()
 ```
-## PyHRM.melt.MeltcurveInterpreter.data_read()
+## PyHRM.melt.MeltcurveInterpreter.data_read
 
 <b>PyHRM.melt.MeltcurveInterpreter.data_read(<i>data = None, path = None, labels =False, index = False, figure = False</i>)</b>
 
@@ -153,6 +153,27 @@ The function takes either a pandas dataframe or the path of the file (.xls, .xls
 
 <br>
 
+### Example
+```
+from PyHRM import melt
+obj = melt.MeltcurveInterpreter()
+
+#reading the HRM data
+hrmdata = obj.data_read(path = './path/file.xls', figure = True)
+```
+ALternatively,
+```
+import pandas as pd
+import openpyxl
+from PyHRM import melt
+obj = melt.MeltcurveInterpreter()
+
+#reading data with pandas
+data = pd.read_excel('./path/file.xls', engine = 'xlrd')
+
+#passing the dataframe to the function
+hrmdata = obj.data_read(data = data, figure = True)
+```
 ## PyHRM.melt.MeltcurveInterpreter.plot()
 <b>PyHRM.melt.MeltcurveInterpreter.plot(<i>data,save = False</i>)</b>
 
@@ -173,6 +194,23 @@ The function takes a pandas dataframe contains signal values and render back the
 <br>
 <br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Returns an interactive plotly figure object.
+
+<br>
+
+### Example
+```
+from PyHRM import melt
+obj = melt.MeltcurveInterpreter()
+
+#reading the HRM data
+hrmdata = obj.data_read(path = './path/file.xls')
+
+#visualizing the data
+fig = obj.plot(data = hrmdata, save = True)
+fig.show()
+```
+
+
 
 # Getting Help
 
