@@ -181,7 +181,7 @@ class MeltcurveInterpreter:
         else:
             return self.transformed_data
 
-    def melt_convertion(self, figure = False, return_value = False, download=False):
+    def melt_conversion(self, figure = False, return_value = False, download=False):
         data_copy = self.transformed_data.copy()
 
         for columns in data_copy.columns[1:]:
@@ -283,7 +283,6 @@ class MeltcurveInterpreter:
                         width1, prominence1, start1, end1 = *second_highest_peak_att,
 
                         if prominence1 < prominence * 0.40:
-                            print('Second Promince is low')
                             start = x[round(start)]
                             end = x[round(end)]
                             features_data.loc[k, c1[:5]] = [peak_tempeartures[0], start, end, prominence, width]
