@@ -281,7 +281,15 @@ hrmdata = obj.data_read(path = './path/file.xls')
 
 features = obj.feature_detection(return_values = True)
 ```
-    
+<br>
+
+## PyHRM.melt.MeltcurveInterpreter.report
+<b>PyHRM.melt.MeltcurveInterpreter.plot()</b>
+
+The method generates a report with the feature extracting data and it's corresponding melting signal figures.
+
+<b>Parameters:</b>&emsp;<b>None</b>
+
 # Getting Help
 
 If you need to get in touch with the team, please contact through email address: [feusion.ai@gmail.com](mailto:feusion.ai@gmail.com?subject=Extractor%20Application)
