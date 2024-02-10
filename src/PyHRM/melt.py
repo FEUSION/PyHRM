@@ -43,7 +43,6 @@ for j in tqdm(range(5), desc=f'Setup Complete', leave=False):
     time.sleep(0.2)
 
 
-
 class MeltcurveInterpreter:
 
     def __init__(self):
@@ -57,6 +56,7 @@ class MeltcurveInterpreter:
         model_path = os.path.join(dir_path,'tar.h5')
 
         self.labels = []
+        self.processed_data = pd.DataFrame()
         self.transformed_data = pd.DataFrame()
         self.model = load_model(model_path, compile=False)
         for j in tqdm(range(2), desc=f'Initializing..', leave=False):
@@ -193,23 +193,23 @@ class MeltcurveInterpreter:
         for cols in data_copy[1:]:
             splrep = scipy.interpolate.splrep(data_copy.iloc[:,0], data_copy[cols], s = 0.031)
             new_df[cols] = scipy.interpolate.splev(xnew,splrep)
-        processed_data = new_df
+        self.processed_data = new_df
 
         if figure:
-            self.plot(data=processed_data)
+            self.plot(data=self.processed_data)
         if download:
             saving_path = self.save_path()
             try:
-                processed_data.to_csv(saving_path)
+                self.processed_data.to_csv(saving_path)
                 print("Download Successful")
             except:
                 print("Download Failed")
 
         if return_value:
-            return processed_data
+            return self.processed_data
 
     def feature_detection(self,download=False, return_values = False):
-        data = self.transformed_data
+        data = self.processed_data
         c1 = ['Tm1', 'Tstart1', 'Tend1', 'Prom1', 'Width1', 'AUC1', 'Tm2', 'Tstart2', 'Tend2', 'Prom2',
               'Width2', 'AUC2', 'Target']
         max_peaks_of_all_curves = []
